@@ -1,0 +1,83 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+
+<h2 class="mb-4">📘 Welcome Admin</h2>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-dark text-white">
+            <a href="{% url 'admin_manage_books' %}" class="stretched-link text-decoration-none text-dark"></a>
+            <div class="card-body">
+                <h5 class="card-title">Manage Books</h5>
+                <p class="card-text">Add, update or remove books.</p>
+                <!-- <a href="{% url 'admin_manage_books' %}" class="btn btn-dark">Go</a> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-dark text-white">
+            <a href="{% url 'admin_manage_categories' %}" class="stretched-link text-decoration-none text-dark"></a>
+            <div class="card-body">
+                <h5 class="card-title">Manage Categories</h5>
+                <p class="card-text">Add, update or remove categories.</p>
+                <!-- <a href="{% url 'admin_manage_categories' %}" class="btn btn-dark">Go</a> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-dark text-white">
+            <a href="{% url 'admin_manage_borrowings' %}" class="stretched-link text-decoration-none text-dark"></a>
+            <div class="card-body">
+                <h5 class="card-title">Manage Borrowings</h5>
+                <p class="card-text">View and Manage borrowings.</p>
+                <!-- <a href="{% url 'admin_manage_borrowings' %}" class="btn btn-dark">Go</a> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-dark text-white">
+            <a href="{% url 'manage_reviews' %}" class="stretched-link text-decoration-none text-white">
+            <div class="card-body">
+                <h5 class="card-title">Manage Reviews</h5>
+                <p class="card-text">View or delete reviews.</p>
+                <!-- <a href="{% url 'manage_reviews' %}" class="btn btn-dark">Go</a> -->
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Top Rated Books
+<h4 class="mt-5">🌟 Top Rated Books</h4>
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+    {% for book in top_books %}
+    <div class="col">
+        <div class="card h-100 shadow">
+            {% if book.cover %}
+            <img src="{{ book.cover.url }}" class="card-img-top" alt="{{ book.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text">{{ book.author }}</p>
+                <p class="text-warning">⭐ {{ book.avg_rating|floatformat:1 }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No reviews yet.</p>
+    {% endfor %}
+</div> -->
+
+<style>
+.dashboard-card {
+  transition: transform 0.2s ease;
+}
+.dashboard-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+}
+</style>
+
+{% endblock %}

@@ -1,137 +1,61 @@
-# Python
+# Python/Django
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Django
 *.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-media/
-staticfiles/
-
-# Virtual Environment
-venv/
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.Python
 env/
+venv/
 ENV/
-env.bak/
-venv.bak/
+*.env
+*.egg-info/
 
-# IDE
+# VSCode
 .vscode/
-.idea/
-*.swp
-*.swo
-*~
+
+# Django static/media
+staticfiles/
+media/
+
+# React/Node
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.DS_Store
+frontend/nodejs
 
 # OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+# Misc
+*.bak
+*.swp
+*.swo 
 
-# React Build
-/frontend/build/
-/frontend/dist/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Environment Variables
-.env
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Logs
-logs
-*.log
-
-# Coverage
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# next.js build output
-.next
-
-# nuxt.js build output
-.nuxt
-
-# vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# Django Secret Key and Database
-secret_key.txt
-*.sqlite3
-
-# Migrations (optional - uncomment if you want to ignore migrations)
-# */migrations/*.py
-# !*/migrations/__init__.py
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
