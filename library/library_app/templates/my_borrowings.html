@@ -1,0 +1,33 @@
+<!-- templates/my_borrowings.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Borrowings</h2>
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Book</th>
+            <th>Borrow Date</th>
+            <th>Return Date</th>
+            <th>Return Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.book.title }}</td>
+            <td>{{ record.borrow_date }}</td>
+            <td>{{ record.return_date|default:"--" }}</td>
+            <td>{{ record.due_date|default:"--" }}</td>
+            <td>{{ record.is_returned|yesno:"Returned,Not Returned" }}</td>
+            <td>
+                {% if not record.is_returned %}
+                <a href="/return/{{ record.id }}/" class="btn btn-success btn-sm">Return</a>
+                {% else %}—{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
