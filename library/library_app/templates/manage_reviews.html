@@ -1,0 +1,79 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+{% if messages %}
+  <div class="position-fixed top-0 start-50 translate-middle-x mt-3 z-3" style="max-width: 600px;">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="container py-4">
+  <h2 class="mb-4">Manage Reviews</h2>
+
+  <!-- Filters -->
+  <form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+      <input type="text" name="book" class="form-control" placeholder="Filter by book title"
+             value="{{ book_query }}">
+    </div>
+    <div class="col-md-3">
+      <select name="rating" class="form-select">
+        <option value="">-- Filter by Rating --</option>
+        {% for r in "12345" %}
+          <option value="{{ r }}" {% if rating_query == r %}selected{% endif %}>{{ r }} ⭐</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-outline-primary w-100">Apply</button>
+    </div>
+    <div class="col-md-2">
+      <a href="{% url 'manage_reviews' %}" class="btn btn-outline-secondary w-100">Clear</a>
+    </div>
+  </form>
+
+  <!-- Reviews Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>User</th>
+          <th>Book</th>
+          <th>Rating</th>
+          <th>Review</th>
+          <th>Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+        <tr>
+          <td>{{ review.user.username }}</td>
+          <td>{{ review.book.title }}</td>
+          <td>{{ review.rating }} ⭐</td>
+          <td>{{ review.content|default:"(No content)" }}</td>
+          <td>{{ review.created_at|date:"M d, Y H:i" }}</td>
+          
+          <td>
+            <form method="post" action="{% url 'delete_review' review.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+         
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted">No reviews found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

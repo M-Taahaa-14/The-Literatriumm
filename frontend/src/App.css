@@ -1,0 +1,155 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Uniform button styling */
+.btn,
+.btn:focus,
+.btn:active,
+.btn:hover {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* Table styling for manage borrowings and all tables */
+.table {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #f2f2f2;
+}
+
+footer.bg-dark {
+  background-color: #111 !important;
+}
+
+.navbar.bg-dark {
+  background-color: #111 !important;
+}
+
+/* Sidebar styles */
+.admin-sidebar {
+  width: 220px;
+  background: #111;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.admin-sidebar .nav-link {
+  color: #fff !important;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.admin-sidebar .nav-link.active,
+.admin-sidebar .nav-link:focus,
+.admin-sidebar .nav-link:hover {
+  background: #222;
+  color: #fff !important;
+  border-radius: 6px;
+}
+
+.admin-profile-circle {
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  font-weight: bold;
+  background: #0d6efd;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+/* Borrow button full width */
+.btn-borrow {
+  width: 100%;
+  margin-top: 0.5rem;
+  background-color: #111 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.book-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.book-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.admin-sidebar.collapsed {
+  width: 70px !important;
+  min-width: 70px !important;
+  align-items: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.admin-sidebar.collapsed .nav-link span {
+  display: none;
+}
+
+.admin-sidebar.collapsed .nav-link {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.admin-sidebar .btn-link {
+  color: #fff !important;
+  box-shadow: none !important;
+}
