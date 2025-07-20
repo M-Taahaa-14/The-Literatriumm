@@ -1,31 +1,34 @@
-# Literatium-2.0
-Django Rest Framework
-# Literatrium 2.0
+# Library Management System - Full Stack Project
 
-## Project Structure
+A comprehensive library management system built with Django REST Framework, React, and Flask microservices.
+
+## 🏗️ Architecture Overview
+
+- **Django Backend** (`library/`) - Main application with REST API (SQLite)
+- **React Frontend** (`frontend/`) - User interface for library operations
+- **Flask Analytics** (`analytics/`) - Microservice for analytics and reporting (PostgreSQL)
+
+## 📁 Project Structure
 
 ```
-Literatrium - 2.0/
-├── library/                  # Django backend
-│   ├── library_app/          # Django app (models, templates, etc.)
-│   ├── library_api/          # Django REST Framework API
+library-management-system/
+├── library/                    # Django Backend (SQLite)
+│   ├── library_app/           # Django app (models, templates, etc.)
+│   ├── library_api/           # Django REST Framework API
 │   ├── manage.py
-│   └── ...
-├── frontend/                 # React frontend (new)
+│   └── db.sqlite3
+├── frontend/                   # React Frontend
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Layout.js         # User layout (navbar, profile, notifications)
-│   │   │   └── AdminLayout.js    # Admin layout (navbar)
+│   │   │   ├── Layout.js          # User layout (navbar, profile, notifications)
+│   │   │   └── AdminLayout.js     # Admin layout (navbar)
 │   │   ├── pages/
 │   │   │   ├── HomePage.js
 │   │   │   ├── LoginPage.js
 │   │   │   ├── SignupPage.js
 │   │   │   ├── BookListPage.js
 │   │   │   ├── BookDetailsPage.js
-│   │   │   ├── BooksByCategoryPage.js
-│   │   │   ├── SearchPage.js
 │   │   │   ├── MyBorrowingsPage.js
-│   │   │   ├── UserBorrowingsPage.js
 │   │   │   ├── ManageReviewsPage.js
 │   │   │   ├── AdminDashboardPage.js
 │   │   │   ├── AdminManageBooksPage.js
@@ -34,20 +37,106 @@ Literatrium - 2.0/
 │   │   │   └── AdminManageCategoriesPage.js
 │   │   ├── App.js
 │   │   └── index.js
-│   └── ...
-├── README.md                 # (this file)
-└── ...
+│   └── package.json
+├── analytics/                  # Flask Analytics Microservice (PostgreSQL)
+│   ├── app.py                 # Flask application factory
+│   ├── models.py              # SQLAlchemy models
+│   ├── services.py            # Business logic layer
+│   ├── config.py              # Configuration settings
+│   ├── requirements.txt       # Python dependencies
+│   └── README.md              # Analytics service documentation
+└── README.md                  # This file
 ```
 
-## Page/Component Summary
+## 🚀 Quick Start
 
-### User Pages
-- **HomePage.js**: Landing page, featured books, categories.
-- **LoginPage.js**: User login form.
-- **SignupPage.js**: User registration form.
-- **BookListPage.js**: All books, paginated.
-- **BookDetailsPage.js**: Book info, reviews, add review.
-- **BooksByCategoryPage.js**: Books in a category, paginated.
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- PostgreSQL (for analytics)
+
+### 1. Django Backend Setup
+```bash
+cd library
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+### 2. React Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### 3. Flask Analytics Setup
+```bash
+cd analytics
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your PostgreSQL credentials
+python app.py
+```
+
+## 🌟 Services Overview
+
+### Django Backend (Port 8000)
+- **Purpose**: Main library management operations
+- **Database**: SQLite
+- **Features**: User management, book catalog, borrowing system, categories
+- **API**: RESTful API for frontend consumption
+
+### React Frontend (Port 3000)
+- **Purpose**: User interface for library operations
+- **Features**: Book browsing, user dashboard, admin panel, responsive design
+- **Integration**: Consumes Django REST API
+
+### Flask Analytics (Port 5001)
+- **Purpose**: Analytics and reporting microservice
+- **Database**: PostgreSQL (separate from main app)
+- **Features**: Borrowing analytics, usage statistics, data visualization endpoints
+
+## 📊 Analytics API Endpoints
+
+- `GET /analytics/borrowed-per-month` - Monthly borrowing trends
+- `GET /analytics/top-10-books` - Most popular books
+- `GET /analytics/borrowed-by-category` - Category-wise statistics
+- `GET /analytics/borrowed-vs-returned` - Return rate analysis
+
+## 🔄 Git Workflow Strategy
+
+### Branch Structure
+- `main` - Production-ready code
+- `deployment` - Deployment configurations
+- `feature/*` - Feature development branches
+
+### Development Process
+1. Start from latest `main`
+2. Create feature branch: `git checkout -b feature/feature-name`
+3. Develop, test, and commit incrementally
+4. Push feature branch and create Pull Request
+5. Code review and merge to `main`
+6. Start next feature from updated `main`
+
+### Commit Guidelines
+- Use clear, descriptive commit messages
+- Keep commits focused and atomic
+- Follow conventional commit format when possible
+
+## 🔧 Data Synchronization
+
+The analytics microservice requires data synchronization from Django to PostgreSQL:
+- Manual sync script for transferring data between databases
+- Scheduled sync capability for regular updates
+- Maintains data consistency between SQLite and PostgreSQL
+
+## 🧪 Testing
+
+Each service includes its own testing setup:
+- Django: `python manage.py test`
+- React: `npm test`
+- Flask: `pytest`
 - **SearchPage.js**: Search books by title/author, paginated.
 - **MyBorrowingsPage.js**: User's borrow records.
 - **UserBorrowingsPage.js**: (Admin) All users' borrow records.

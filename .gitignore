@@ -13,6 +13,11 @@ ENV/
 *.env
 *.egg-info/
 
+# Flask Analytics
+analytics/.env
+analytics/instance/
+analytics/*.db
+
 # VSCode
 .vscode/
 
