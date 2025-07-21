@@ -5,6 +5,7 @@ import SignupPage from './pages/SignupPage';
 import BookListPage from './pages/BookListPage';
 import BookDetailsPage from './pages/BookDetailsPage';
 import MyBorrowingsPage from './pages/MyBorrowingsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 import ManageReviewsPage from './pages/ManageReviewsPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminManageBooksPage from './pages/AdminManageBooksPage';
@@ -35,10 +36,13 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+          {/* Default redirect to login */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path="/books" element={<ProtectedRoute><BookListPage /></ProtectedRoute>} />
           <Route path="/books/:id" element={<ProtectedRoute><BookDetailsPage /></ProtectedRoute>} />
           <Route path="/user_borrowings" element={<ProtectedRoute><MyBorrowingsPage /></ProtectedRoute>} />
+          <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
         </Route>
         
         <Route element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
