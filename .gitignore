@@ -21,6 +21,9 @@ analytics/*.db
 # VSCode
 .vscode/
 
+# JetBrains IDEs (PyCharm, IntelliJ, WebStorm, etc.)
+.idea/
+
 # Django static/media
 staticfiles/
 media/

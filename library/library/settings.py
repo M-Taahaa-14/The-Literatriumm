@@ -145,3 +145,11 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+ENABLE_ANALYTICS_SYNC = True  
+
+ANALYTICS_DB_HOST = 'localhost'
+ANALYTICS_DB_PORT = '5432'
+ANALYTICS_DB_NAME = 'analytics_db'
+ANALYTICS_DB_USER = 'postgres'
+ANALYTICS_DB_PASSWORD = 'postgres'
