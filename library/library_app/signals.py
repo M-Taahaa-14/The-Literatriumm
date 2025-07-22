@@ -182,13 +182,44 @@ class PostgreSQLSyncHandler:
         finally:
             conn.close()
 
+    def sync_review(self, review_instance):
+        """Sync review to PostgreSQL - for ratings analytics."""
+        conn = self.get_connection()
+        if not conn:
+            return
+            
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO library_app_review (id, user_id, book_id, rating, comment, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (id) DO UPDATE SET
+                    rating = EXCLUDED.rating,
+                    comment = EXCLUDED.comment
+            """, (
+                review_instance.id,
+                review_instance.user_id,
+                review_instance.book_id,
+                review_instance.rating,
+                review_instance.content,
+                review_instance.created_at
+            ))
+            
+            conn.commit()
+            logger.info(f"Synced review {review_instance.id} to analytics database")
+            
+        except Exception as e:
+            logger.error(f"Failed to sync review {review_instance.id}: {e}")
+        finally:
+            conn.close()
+
 
 # Initialize sync handler
 sync_handler = PostgreSQLSyncHandler()
 
 
 # Django Signal Receivers
-from .models import BookCategory, Book, BorrowRecord
+from .models import BookCategory, Book, BorrowRecord, Review
 
 @receiver(post_save, sender='auth.User')
 def sync_user_to_analytics(sender, instance, created, **kwargs):
@@ -212,3 +243,9 @@ def sync_book_to_analytics(sender, instance, created, **kwargs):
 def sync_borrowing_to_analytics(sender, instance, created, **kwargs):
     """Sync borrowing changes to analytics database - MOST IMPORTANT."""
     sync_handler.sync_borrowing(instance)
+
+
+@receiver(post_save, sender=Review)
+def sync_review_to_analytics(sender, instance, created, **kwargs):
+    """Sync review changes to analytics database - for ratings analytics."""
+    sync_handler.sync_review(instance)
