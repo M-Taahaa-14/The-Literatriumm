@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,7 +17,13 @@ function LoginPage() {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('is_admin', res.data.is_admin);
                 localStorage.setItem('full_name', res.data.full_name);
-                window.location.href = res.data.is_admin ? '/admin/dashboard' : '/';
+                
+                // Use React Router navigation instead of window.location
+                if (res.data.is_admin) {
+                    navigate('/admin/dashboard', { replace: true });
+                } else {
+                    navigate('/home', { replace: true }); // Changed from '/' to '/home'
+                }
             } else {
                 setError('Invalid response from server.');
             }

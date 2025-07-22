@@ -5,7 +5,7 @@ These models mirror the Django models for analytics purposes.
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func, Numeric
 
 # Initialize db here to avoid circular imports
 db = SQLAlchemy()
@@ -25,6 +25,7 @@ class User(db.Model):
     
     # Relationships
     borrowings = db.relationship('Borrowing', backref='user', lazy=True)
+    reviews = db.relationship('Review', backref='user', lazy=True)
     
     def __repr__(self):
         return f'<User {self.username}>'
@@ -62,8 +63,25 @@ class Book(db.Model):
     # Foreign Keys
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
     
+    # New fields for cover images and ratings
+    cover_image = db.Column(db.String(255), nullable=True)  # Store image path/URL
+    
     # Relationships
     borrowings = db.relationship('Borrowing', backref='book', lazy=True)
+    reviews = db.relationship('Review', backref='book', lazy=True)
+    
+    @property
+    def average_rating(self):
+        """Calculate average rating from reviews."""
+        if not self.reviews:
+            return None
+        total_rating = sum(review.rating for review in self.reviews)
+        return round(total_rating / len(self.reviews), 1)
+    
+    @property
+    def total_borrowings(self):
+        """Get total number of times this book was borrowed."""
+        return len(self.borrowings)
     
     def __repr__(self):
         return f'<Book {self.title}>'
@@ -78,7 +96,7 @@ class Borrowing(db.Model):
     due_date = db.Column(db.DateTime, nullable=False)
     return_date = db.Column(db.DateTime, nullable=True)  # NULL if not returned
     is_returned = db.Column(db.Boolean, default=False)
-    late_fee = db.Column(db.Decimal(10, 2), default=0.00)
+    late_fee = db.Column(Numeric(10, 2), default=0.00)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -102,6 +120,28 @@ class Borrowing(db.Model):
         if not self.is_overdue:
             return 0
         return (datetime.utcnow() - self.due_date).days
+
+
+class Review(db.Model):
+    """Review model for book ratings and reviews."""
+    __tablename__ = 'reviews'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=True)  # Review text (optional)
+    rating = db.Column(db.Integer, nullable=False)  # Rating 1-5
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Foreign Keys
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), nullable=False)
+    
+    # Constraints
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'book_id', name='unique_user_book_review'),
+    )
+    
+    def __repr__(self):
+        return f'<Review {self.id}: {self.user.username} rated {self.book.title} ⭐{self.rating}>'
 
 
 # Utility functions for common analytics queries
