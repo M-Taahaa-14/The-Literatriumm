@@ -361,15 +361,16 @@ function TopBooksPage() {
                                                 #{index + 1}
                                             </div>
                                             <img 
-                                                src={book.cover_image.startsWith('/') 
-                                                    ? `http://127.0.0.1:8000${book.cover_image}` 
-                                                    : book.cover_image
+                                                src={book.cover_image 
+                                                    ? `http://127.0.0.1:8000/media/${book.cover_image.replace(/^\/media\//, '')}` 
+                                                    : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA0MCA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjU1IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMyAxNkgyN1YzOUgxM1YxNloiIGZpbGw9IiM5Q0EzQUYiLz4KPHA+dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Cb29rPC90ZXh0Pgo8L3N2Zz4='
                                                 }
                                                 alt={book.title}
                                                 className="me-3"
-                                                style={{ width: '40px', height: '55px', objectFit: 'cover' }}
+                                                style={{ width: '40px', height: '55px', objectFit: 'cover', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6' }}
                                                 onError={(e) => {
-                                                    e.target.src = '/api/placeholder/40/55';
+                                                    // Fallback to a simple SVG placeholder
+                                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA0MCA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjU1IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMyAxNkgyN1YzOUgxM1YxNloiIGZpbGw9IiM5Q0EzQUYiLz4KPHA+dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Cb29rPC90ZXh0Pgo8L3N2Zz4=';
                                                 }}
                                             />
                                             <div className="flex-grow-1">
@@ -448,15 +449,16 @@ function TopBooksPage() {
                                                 #{index + 1}
                                             </div>
                                             <img 
-                                                src={book.cover_image.startsWith('/') 
-                                                    ? `http://127.0.0.1:8000${book.cover_image}` 
-                                                    : book.cover_image
+                                                src={book.cover_image 
+                                                    ? `http://127.0.0.1:8000/media/${book.cover_image.replace(/^\/media\//, '')}` 
+                                                    : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA0MCA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjU1IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMyAxNkgyN1YzOUgxM1YxNloiIGZpbGw9IiM5Q0EzQUYiLz4KPHA+dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Cb29rPC90ZXh0Pgo8L3N2Zz4='
                                                 }
                                                 alt={book.title}
                                                 className="me-3"
-                                                style={{ width: '40px', height: '55px', objectFit: 'cover' }}
+                                                style={{ width: '40px', height: '55px', objectFit: 'cover', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6' }}
                                                 onError={(e) => {
-                                                    e.target.src = '/api/placeholder/40/55';
+                                                    // Fallback to a simple SVG placeholder
+                                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA0MCA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjU1IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMyAxNkgyN1YzOUgxM1YxNloiIGZpbGw9IiM5Q0EzQUYiLz4KPHA+dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Cb29rPC90ZXh0Pgo8L3N2Zz4=';
                                                 }}
                                             />
                                             <div className="flex-grow-1">
