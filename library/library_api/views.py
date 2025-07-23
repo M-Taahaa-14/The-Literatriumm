@@ -137,6 +137,19 @@ class ReviewDeleteAPIView(generics.DestroyAPIView):
         # Users can only delete their own reviews
         return Review.objects.filter(user=self.request.user)
 
+class ReviewUpdateAPIView(generics.UpdateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
+    
+    def get_queryset(self):
+        # Users can only update their own reviews
+        return Review.objects.filter(user=self.request.user)
+    
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
+
 class UserProfileAPIView(generics.RetrieveAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]

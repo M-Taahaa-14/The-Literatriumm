@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     BookListAPIView, BookDetailAPIView, CategoryListAPIView,
     BorrowRecordListAPIView, BorrowBookAPIView, ReturnBookAPIView,
-    ReviewListCreateAPIView, ReviewDeleteAPIView, UserProfileAPIView, LoginAPIView,
+    ReviewListCreateAPIView, ReviewDeleteAPIView, ReviewUpdateAPIView, UserProfileAPIView, LoginAPIView,
     NotificationListAPIView, MarkAllNotificationsReadAPIView,
     BookAdminViewSet, BookCategoryAdminViewSet, SignupAPIView, AdminDashboardAPIView,
     SearchBooksAPIView, BooksByCategoryAPIView, MyBorrowingsAPIView,
@@ -28,6 +28,7 @@ urlpatterns = [
     path('borrow/<int:book_id>/', BorrowBookAPIView.as_view(), name='api_borrow_book'),
     path('return/<int:record_id>/', ReturnBookAPIView.as_view(), name='api_return_book'),
     path('reviews/', ReviewListCreateAPIView.as_view(), name='api_reviews'),
+    path('reviews/<int:id>/', ReviewUpdateAPIView.as_view(), name='api_update_review'),
     path('reviews/<int:id>/delete/', ReviewDeleteAPIView.as_view(), name='api_delete_review'),
     path('profile/', UserProfileAPIView.as_view(), name='api_my_profile'),
     path('notifications/', NotificationListAPIView.as_view(), name='api_notifications'),

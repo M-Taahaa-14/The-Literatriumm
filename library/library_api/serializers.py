@@ -23,9 +23,18 @@ class UserSignupSerializer(serializers.ModelSerializer):
         return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    
     class Meta:
         model = UserProfile
         fields = '__all__'
+    
+    def get_user(self, obj):
+        return {
+            'id': obj.user.id,
+            'username': obj.user.username,
+            'email': obj.user.email
+        }
 
 class BookSerializer(serializers.ModelSerializer):
     isbn = serializers.CharField(required=False, allow_blank=True)
@@ -36,9 +45,8 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def create(self, validated_data):
-        # If ISBN is not provided or is blank, let Django generate it
         if not validated_data.get('isbn'):
-            validated_data.pop('isbn', None)  # Remove empty ISBN so default kicks in
+            validated_data.pop('isbn', None)  
             
         # Handle empty cover_image object from frontend
         cover_image = validated_data.get('cover_image')
@@ -72,12 +80,15 @@ class BorrowRecordUserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='user.username', read_only=True)
+    user_name = serializers.SerializerMethodField()
     
     class Meta:
         model = Review
-        fields = ['id', 'book', 'content', 'rating', 'created_at', 'user_name']
+        fields = ['id', 'user', 'book', 'content', 'rating', 'created_at', 'user_name']
         read_only_fields = ['user', 'created_at']
+    
+    def get_user_name(self, obj):
+        return obj.user.username if obj.user else None
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -98,7 +109,6 @@ class BookAdminSerializer(serializers.ModelSerializer):
         return obj.borrowrecord_set.filter(is_returned=False).count()
     
     def create(self, validated_data):
-        # If ISBN is not provided or is blank, let Django generate it
         if not validated_data.get('isbn'):
             validated_data.pop('isbn', None)  # Remove empty ISBN so default kicks in
         
