@@ -39,13 +39,37 @@ function AdminManageCategoriesPage() {
         setError(''); setSuccess('');
         const token = localStorage.getItem('token');
         if (!token) return;
+        
+        // Client-side validation: Check if category already exists
+        const categoryExists = categories.some(cat => 
+            cat.name.toLowerCase().trim() === newCategory.toLowerCase().trim()
+        );
+        
+        if (categoryExists) {
+            setError(`Category "${newCategory}" already exists. Please choose a different name.`);
+            return;
+        }
+        
         try {
-            await api.post('admin/categories/', { name: newCategory });
-            setSuccess('Category added.');
+            await api.post('admin/categories/', { name: newCategory.trim() });
+            setSuccess('Category added successfully.');
             setNewCategory('');
             fetchCategories();
-        } catch {
-            setError('Could not add category.');
+        } catch (err) {
+            console.error('Add category error:', err);
+            if (err.response?.status === 400) {
+                // Handle backend validation errors
+                const errorData = err.response.data;
+                if (errorData.name && errorData.name.includes('already exists')) {
+                    setError(`Category "${newCategory}" already exists. Please choose a different name.`);
+                } else if (errorData.name) {
+                    setError(`Error: ${errorData.name[0]}`);
+                } else {
+                    setError('Invalid category data. Please check your input.');
+                }
+            } else {
+                setError('Could not add category. Please try again.');
+            }
         }
     };
 
@@ -58,14 +82,38 @@ function AdminManageCategoriesPage() {
         setError(''); setSuccess('');
         const token = localStorage.getItem('token');
         if (!token) return;
+        
+        // Client-side validation: Check if category name already exists (excluding current category)
+        const categoryExists = categories.some(cat => 
+            cat.id !== id && cat.name.toLowerCase().trim() === editName.toLowerCase().trim()
+        );
+        
+        if (categoryExists) {
+            setError(`Category "${editName}" already exists. Please choose a different name.`);
+            return;
+        }
+        
         try {
-            await api.put(`admin/categories/${id}/`, { name: editName });
-            setSuccess('Category updated.');
+            await api.put(`admin/categories/${id}/`, { name: editName.trim() });
+            setSuccess('Category updated successfully.');
             setEditId(null);
             setEditName('');
             fetchCategories();
-        } catch {
-            setError('Could not update category.');
+        } catch (err) {
+            console.error('Update category error:', err);
+            if (err.response?.status === 400) {
+                // Handle backend validation errors
+                const errorData = err.response.data;
+                if (errorData.name && errorData.name.includes('already exists')) {
+                    setError(`Category "${editName}" already exists. Please choose a different name.`);
+                } else if (errorData.name) {
+                    setError(`Error: ${errorData.name[0]}`);
+                } else {
+                    setError('Invalid category data. Please check your input.');
+                }
+            } else {
+                setError('Could not update category. Please try again.');
+            }
         }
     };
 
