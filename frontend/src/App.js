@@ -42,7 +42,7 @@ function App() {
           <Route path="/books" element={<ProtectedRoute><BookListPage /></ProtectedRoute>} />
           <Route path="/books/:id" element={<ProtectedRoute><BookDetailsPage /></ProtectedRoute>} />
           <Route path="/user_borrowings" element={<ProtectedRoute><MyBorrowingsPage /></ProtectedRoute>} />
-          <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+          <Route path="/monthly_borrowings" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
         </Route>
         
         <Route element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
