@@ -26,7 +26,11 @@ function AdminAddBookPage() {
     const handleChange = e => {
         const { name, value, files } = e.target;
         if (name === 'cover_image') {
-            setForm({ ...form, cover_image: files[0] });
+            if (files && files[0]) {
+                setForm({ ...form, cover_image: files[0] });
+            } else {
+                setForm({ ...form, cover_image: null });
+            }
         } else {
             setForm({ ...form, [name]: value });
         }
@@ -41,15 +45,27 @@ function AdminAddBookPage() {
             setLoading(false);
             return;
         }
+        
         const data = new FormData();
-        Object.entries(form).forEach(([k, v]) => v && data.append(k, v));
+        // Add all form fields to FormData
+        data.append('title', form.title);
+        data.append('author', form.author);
+        data.append('category', form.category);
+        data.append('total_copies', form.total_copies);
+        data.append('available_copies', form.available_copies);
+        
+        // Only add cover_image if a file was selected
+        if (form.cover_image) {
+            data.append('cover_image', form.cover_image);
+        }
+        
         try {
             await api.post('admin/books/', data);
             setSuccess('Book added successfully!');
             setForm({ title: '', author: '', category: '', total_copies: '', available_copies: '', cover_image: null });
             setTimeout(() => navigate('/admin/books'), 1200);
-        } catch {
-            setError('Could not add book.');
+        } catch (err) {
+            setError(err.response?.data?.error || 'Could not add book.');
         }
         setLoading(false);
     };

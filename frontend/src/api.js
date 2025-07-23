@@ -18,16 +18,21 @@ api.interceptors.request.use(
         if (token) {
             config.headers['Authorization'] = `Token ${token}`;
         }
+        
+        // Don't override Content-Type for FormData (file uploads)
+        if (config.data instanceof FormData) {
+            // Let browser set Content-Type automatically for multipart/form-data
+            delete config.headers['Content-Type'];
+        }
+        
         // Add CSRF token if available
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
         if (csrfToken) {
             config.headers['X-CSRFToken'] = csrfToken.value;
         }
-        console.log('API Request:', config.method?.toUpperCase(), config.url, config.data);
         return config;
     },
     (error) => {
-        console.error('API Request Error:', error);
         return Promise.reject(error);
     }
 );
@@ -35,17 +40,9 @@ api.interceptors.request.use(
 // Response interceptor for better error handling
 api.interceptors.response.use(
     (response) => {
-        console.log('API Response:', response.status, response.config.url);
         return response;
     },
     (error) => {
-        console.error('API Response Error:', {
-            status: error.response?.status,
-            url: error.config?.url,
-            data: error.response?.data,
-            message: error.message
-        });
-        
         // Handle authentication errors
         if (error.response?.status === 401) {
             localStorage.removeItem('token');

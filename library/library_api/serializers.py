@@ -28,9 +28,31 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookSerializer(serializers.ModelSerializer):
+    isbn = serializers.CharField(required=False, allow_blank=True)
+    cover_image = serializers.ImageField(required=False, allow_null=True)
+    
     class Meta:
         model = Book
         fields = '__all__'
+    
+    def create(self, validated_data):
+        # If ISBN is not provided or is blank, let Django generate it
+        if not validated_data.get('isbn'):
+            validated_data.pop('isbn', None)  # Remove empty ISBN so default kicks in
+            
+        # Handle empty cover_image object from frontend
+        cover_image = validated_data.get('cover_image')
+        if cover_image == {} or cover_image == '' or cover_image is None:
+            validated_data.pop('cover_image', None)
+            
+        return super().create(validated_data)
+    
+    def to_internal_value(self, data):
+        # Handle empty cover_image object before validation
+        if 'cover_image' in data and data['cover_image'] == {}:
+            data = data.copy()  # Don't modify original data
+            data.pop('cover_image')
+        return super().to_internal_value(data)
 
 class BookCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,13 +87,34 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 class BookAdminSerializer(serializers.ModelSerializer):
     borrowed_count = serializers.SerializerMethodField()
+    isbn = serializers.CharField(required=False, allow_blank=True)
+    cover_image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Book
-        fields = '__all__' 
+        fields = '__all__'
 
     def get_borrowed_count(self, obj):
         return obj.borrowrecord_set.filter(is_returned=False).count()
+    
+    def create(self, validated_data):
+        # If ISBN is not provided or is blank, let Django generate it
+        if not validated_data.get('isbn'):
+            validated_data.pop('isbn', None)  # Remove empty ISBN so default kicks in
+        
+        # Handle empty cover_image object from frontend
+        cover_image = validated_data.get('cover_image')
+        if cover_image == {} or cover_image == '' or cover_image is None:
+            validated_data.pop('cover_image', None)
+            
+        return super().create(validated_data)
+    
+    def to_internal_value(self, data):
+        # Handle empty cover_image object before validation
+        if 'cover_image' in data and data['cover_image'] == {}:
+            data = data.copy()  # Don't modify original data
+            data.pop('cover_image')
+        return super().to_internal_value(data)
 
 class BookCategoryAdminSerializer(serializers.ModelSerializer):
     class Meta:

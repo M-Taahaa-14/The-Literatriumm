@@ -29,7 +29,7 @@ export default function AdminManageBooks() {
         setEditId(book.id);
         setEditData({
             ...book,
-            cover_image: null, // for new upload
+            cover_image: book.cover_image, // Keep existing image reference
             available_copies: book.available_copies,
             total_copies: book.total_copies,
             category: book.category, // may be id or object, adjust as needed
@@ -48,7 +48,10 @@ export default function AdminManageBooks() {
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === "cover_image") {
-            setEditData((d) => ({ ...d, cover_image: files[0] }));
+            // If a file is selected, use it; otherwise keep the current state
+            if (files && files[0]) {
+                setEditData((d) => ({ ...d, cover_image: files[0], newImageSelected: true }));
+            }
         } else {
             setEditData((d) => ({ ...d, [name]: value }));
         }
@@ -76,7 +79,9 @@ export default function AdminManageBooks() {
         formData.append("category", editData.category); 
         formData.append("total_copies", total);
         formData.append("available_copies", available);
-        if (editData.cover_image) {
+        
+        // Only append cover_image if a new file was selected
+        if (editData.newImageSelected && editData.cover_image instanceof File) {
             formData.append("cover_image", editData.cover_image);
         }
 
@@ -143,12 +148,18 @@ export default function AdminManageBooks() {
                                             style={{ width: 50, height: 70, objectFit: "cover" }}
                                         />
                                     )}
+                                    <br />
                                     <input
                                         type="file"
                                         name="cover_image"
                                         accept="image/*"
                                         onChange={handleChange}
                                     />
+                                    {editData.newImageSelected && (
+                                        <small className="text-success">
+                                            <br />New file selected: {editData.cover_image?.name}
+                                        </small>
+                                    )}
                                 </td>
                                 <td>
                                     <input
