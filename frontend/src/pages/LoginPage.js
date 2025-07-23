@@ -18,11 +18,14 @@ function LoginPage() {
                 localStorage.setItem('is_admin', res.data.is_admin);
                 localStorage.setItem('full_name', res.data.full_name);
                 
+                // Dispatch custom event to notify components of successful login
+                window.dispatchEvent(new CustomEvent('loginSuccess'));
+                
                 // Use React Router navigation instead of window.location
                 if (res.data.is_admin) {
                     navigate('/admin/dashboard', { replace: true });
                 } else {
-                    navigate('/home', { replace: true }); // Changed from '/' to '/home'
+                    navigate('/home', { replace: true });
                 }
             } else {
                 setError('Invalid response from server.');

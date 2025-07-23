@@ -40,6 +40,27 @@ function Layout() {
         }
     }, []);
 
+    // Listen for custom login event to refresh authentication state
+    useEffect(() => {
+        const handleLoginSuccess = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                api.get('profile/')
+                    .then(res => setProfile(res.data))
+                    .catch(() => setProfile(null));
+                api.get('notifications/')
+                    .then(res => {
+                        setNotifications(res.data);
+                        setNotifUnread(res.data.filter(n => !n.is_read).length);
+                    })
+                    .catch(() => setNotifications([]));
+            }
+        };
+
+        window.addEventListener('loginSuccess', handleLoginSuccess);
+        return () => window.removeEventListener('loginSuccess', handleLoginSuccess);
+    }, []);
+
     useEffect(() => {
         function handleClick(e) {
             if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);

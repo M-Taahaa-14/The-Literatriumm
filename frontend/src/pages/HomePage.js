@@ -11,13 +11,27 @@ function HomePage() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    useEffect(() => {
+    const loadData = () => {
         api.get('books/')
             .then(res => setBooks(res.data))
             .catch(() => setBooks([]));
         api.get('categories/')
             .then(res => setCategories(res.data))
             .catch(() => setCategories([]));
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    // Listen for login success to refresh page data
+    useEffect(() => {
+        const handleLoginSuccess = () => {
+            loadData();
+        };
+
+        window.addEventListener('loginSuccess', handleLoginSuccess);
+        return () => window.removeEventListener('loginSuccess', handleLoginSuccess);
     }, []);
 
     useEffect(() => {
