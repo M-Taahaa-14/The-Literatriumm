@@ -1,34 +1,21 @@
-# Core Flask packages
 Flask==2.3.2
 Flask-SQLAlchemy==3.0.5
 Flask-CORS==4.0.0
+Werkzeug==2.3.7
 
-# Database
 psycopg2-binary==2.9.7  
 SQLAlchemy==2.0.19
 
-# Development & Testing
 pytest==7.4.0
 pytest-flask==1.2.0
 python-dotenv==1.0.0
-
-# Data processing
 pandas==2.0.3
 numpy==1.24.3
 
-# HTTP requests (for Django API sync)
 requests==2.31.0
-
-# Environment and configuration
 python-decouple==3.8
-
-# Production server
 gunicorn==21.2.0
-
-# Code quality
 flake8==6.0.0
 black==23.7.0
-
-# Optional: Caching (Redis)
 redis==4.6.0
 Flask-Caching==2.0.2

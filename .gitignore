@@ -12,6 +12,7 @@ venv/
 ENV/
 *.env
 *.egg-info/
+db.sqlite3
 
 # Flask Analytics
 analytics/.env
@@ -20,6 +21,9 @@ analytics/*.db
 
 # VSCode
 .vscode/
+
+# JetBrains IDEs (PyCharm, IntelliJ, WebStorm, etc.)
+.idea/
 
 # Django static/media
 staticfiles/

@@ -1,7 +1,13 @@
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 from config import Config
-from models import db
+from database import db
+from dotenv import load_dotenv
+from flask import request
+from services import AnalyticsService
+
+load_dotenv()
 
 
 def create_app(config_class=Config):
@@ -9,8 +15,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     db.init_app(app)
-    CORS(app)  
-
+    CORS(app) 
     register_routes(app)
     
     with app.app_context():
@@ -20,8 +25,8 @@ def create_app(config_class=Config):
 
 
 def register_routes(app):
-    
     @app.route('/health', methods=['GET'])
+
     def health_check():
         return jsonify({
             'status': 'healthy',
@@ -47,9 +52,7 @@ def register_routes(app):
     
     @app.route('/analytics/borrowed-per-month', methods=['GET'])
     def borrowed_per_month():
-        """Get monthly borrowing statistics for a specific year."""
-        from flask import request
-        from services import AnalyticsService
+
         
         try:
             year = request.args.get('year', type=int)

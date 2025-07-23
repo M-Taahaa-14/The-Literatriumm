@@ -43,12 +43,46 @@ The analytics service will be available at `http://localhost:5001`
 - `GET /health` - Service health status
 - `GET /analytics` - Service information
 
-### Analytics Endpoints
-- `GET /analytics/borrowed-per-month` - Monthly borrowing statistics
-- `GET /analytics/top-books-by-borrowings` - Top 10 books by borrowing count
-- `GET /analytics/top-books-by-ratings` - Top 10 books by average rating
-- `GET /analytics/borrowed-by-category` - Borrowings by book category (planned)
-- `GET /analytics/borrowed-vs-returned` - Borrowed vs returned statistics (planned)
+### Analytics Endpoints (To be implemented)
+- `GET /analytics/borrowed-per-month` - Monthly borrowing statistics ✅ **IMPLEMENTED**
+- `GET /analytics/top-10-books` - Most borrowed books
+- `GET /analytics/borrowed-by-category` - Borrowings by book category  
+- `GET /analytics/borrowed-vs-returned` - Borrowed vs returned statistics
+
+### ✅ Implemented: Monthly Borrowing Analytics
+
+**Endpoint**: `GET /analytics/borrowed-per-month`
+
+**Query Parameters**:
+- `year` (optional) - Year to analyze (defaults to current year)
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "data": {
+    "labels": ["January", "February", "March", ...],
+    "values": [5, 3, 8, 2, ...],
+    "year": 2025,
+    "total": 156,
+    "peak_month": "March",
+    "peak_count": 8
+  },
+  "message": "Monthly borrowing statistics for 2025"
+}
+```
+
+**Usage Examples**:
+```bash
+# Current year statistics
+curl http://localhost:5001/analytics/borrowed-per-month
+
+# Specific year statistics
+curl http://localhost:5001/analytics/borrowed-per-month?year=2024
+
+# Error handling - invalid year gracefully defaults to current year
+curl http://localhost:5001/analytics/borrowed-per-month?year=invalid
+```
 
 ## Response Format
 All analytics endpoints return data in the format:
