@@ -35,43 +35,65 @@ function ManageReviewsPage() {
 
     useEffect(() => {
         fetchReviews();
-        // eslint-disable-next-line
     }, []);
 
-    const handleFilter = (e) => {
-        e.preventDefault();
-        fetchReviews();
-    };
+    // Auto-filter when search inputs change
+    useEffect(() => {
+        const delayedFilter = setTimeout(() => {
+            fetchReviews();
+        }, 300); // 300ms delay to avoid too many API calls while typing
 
-    const handleDelete = async (id) => {
+        return () => clearTimeout(delayedFilter);
+        // eslint-disable-next-line
+    }, [bookQuery, ratingQuery]);
+
+    const handleDelete = async (id, username, bookTitle) => {
+        const confirmDelete = window.confirm(
+            `Are you sure you want to delete the review by "${username}" for "${bookTitle}"?\n\nThis action cannot be undone.`
+        );
+        
+        if (!confirmDelete) {
+            return;
+        }
+        
+        setError(''); setSuccess('');
         const token = localStorage.getItem('token');
         if (!token) return;
+        
         try {
             await api.delete(`admin/reviews/${id}/delete/`);
-            setSuccess('Review deleted.');
+            setSuccess(`Review by "${username}" for "${bookTitle}" has been deleted successfully.`);
             fetchReviews();
-        } catch {
-            setError('Could not delete review.');
+        } catch (err) {
+            console.error('Delete review error:', err);
+            setError('Could not delete review. Please try again.');
         }
     };
 
     return (
         <div>
             <h2>Manage Reviews</h2>
-            <form className="row g-3 mb-4" onSubmit={handleFilter}>
-                <div className="col-md-5">
-                    <input type="text" className="form-control" placeholder="Filter by book title" value={bookQuery} onChange={e => setBookQuery(e.target.value)} />
+            <div className="row g-3 mb-4">
+                <div className="col-md-8">
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Filter by book title (auto-filter)" 
+                        value={bookQuery} 
+                        onChange={e => setBookQuery(e.target.value)} 
+                    />
                 </div>
-                <div className="col-md-3">
-                    <select className="form-select" value={ratingQuery} onChange={e => setRatingQuery(e.target.value)}>
+                <div className="col-md-4">
+                    <select 
+                        className="form-select" 
+                        value={ratingQuery} 
+                        onChange={e => setRatingQuery(e.target.value)}
+                    >
                         <option value="">All Ratings</option>
-                        {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+                        {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Star{n > 1 ? 's' : ''}</option>)}
                     </select>
                 </div>
-                <div className="col-md-2">
-                    <button className="btn btn-primary w-100" type="submit">Filter</button>
-                </div>
-            </form>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             {success && <div className="alert alert-success">{success}</div>}
             {loading ? (
@@ -98,13 +120,42 @@ function ManageReviewsPage() {
                         <tbody>
                             {reviews.map(review => (
                                 <tr key={review.id}>
-                                    <td>{review.user}</td>
-                                    <td>{review.book}</td>
-                                    <td>{review.rating}</td>
-                                    <td>{review.content}</td>
+                                    <td>
+                                        <strong>{review.username || 'Unknown User'}</strong>
+                                        <br />
+                                        <small className="text-muted">ID: {review.user}</small>
+                                    </td>
+                                    <td>
+                                        <strong>{review.book_title || 'Unknown Book'}</strong>
+                                        <br />
+                                        <small className="text-muted">ID: {review.book}</small>
+                                    </td>
+                                    <td>
+                                        <div className="d-flex align-items-center">
+                                            <span style={{ fontSize: '1.2rem', color: '#ffc107' }}>
+                                                {[1, 2, 3, 4, 5].map(star => (
+                                                    <span key={star}>
+                                                        {star <= review.rating ? '★' : '☆'}
+                                                    </span>
+                                                ))}
+                                            </span>
+                                            <span className="ms-2 text-muted">({review.rating}/5)</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+                                            {review.content || <em className="text-muted">No content</em>}
+                                        </div>
+                                    </td>
                                     <td>{review.created_at ? new Date(review.created_at).toLocaleDateString() : ''}</td>
                                     <td>
-                                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(review.id)}>Delete</button>
+                                        <button 
+                                            className="btn btn-danger btn-sm" 
+                                            onClick={() => handleDelete(review.id, review.username, review.book_title)}
+                                            title="Delete this review"
+                                        >
+                                            <i className="bi bi-trash"></i> Delete
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
