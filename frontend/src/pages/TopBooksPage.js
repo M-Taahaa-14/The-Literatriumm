@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -29,7 +29,7 @@ function TopBooksPage() {
     const [activeTab, setActiveTab] = useState('borrowings');
     const [limit, setLimit] = useState(10);
 
-    const fetchTopBooksByBorrowings = async () => {
+    const fetchTopBooksByBorrowings = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:5001/analytics/top-books-by-borrowings?limit=${limit}`);
             
@@ -48,9 +48,9 @@ function TopBooksPage() {
             console.error('Error fetching borrowings data:', err);
             setError('Unable to connect to analytics service.');
         }
-    };
+    }, [limit]);
 
-    const fetchTopBooksByRatings = async () => {
+    const fetchTopBooksByRatings = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:5001/analytics/top-books-by-ratings?limit=${limit}`);
             
@@ -69,7 +69,7 @@ function TopBooksPage() {
             console.error('Error fetching ratings data:', err);
             setError('Unable to connect to analytics service.');
         }
-    };
+    }, [limit]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -85,7 +85,7 @@ function TopBooksPage() {
         };
 
         fetchData();
-    }, [limit]);
+    }, [limit, fetchTopBooksByBorrowings, fetchTopBooksByRatings]);
 
     const handleLimitChange = (event) => {
         setLimit(parseInt(event.target.value));

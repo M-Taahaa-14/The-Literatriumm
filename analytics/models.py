@@ -1,13 +1,27 @@
-"""
-SQLAlchemy models for Analytics microservice.
-These models mirror the Django models and are synced via Django signals.
-"""
-
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import func, Numeric
 
 # Initialize db here to avoid circular imports
+# 
+# WHY THIS PATTERN?
+# =================
+# 1. CIRCULAR IMPORT PROBLEM:
+#    - If we create db in app.py: models.py would need to import from app.py
+#    - If app.py imports from models.py: creates circular dependency
+#    - Python can't resolve: app.py ← → models.py
+#
+# 2. SOLUTION - APPLICATION FACTORY PATTERN:
+#    - Create db instance HERE (in models.py) without attaching to app
+#    - Use db.init_app(app) LATER in app.py to connect them
+#    - No circular imports: models.py doesn't import from app.py
+#
+# 3. FLOW:
+#    models.py: db = SQLAlchemy()  # Creates unbound instance
+#    app.py: db.init_app(app)      # Binds db to Flask app later
+#    app.py imports db from models.py  
+#    models.py NEVER imports from app.py  
+#    No circular dependency!  
 db = SQLAlchemy()
 
 
@@ -24,7 +38,6 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Additional fields from UserProfile
     full_name = db.Column(db.String(200))
     address = db.Column(db.Text)
     phone = db.Column(db.String(20))
@@ -34,7 +47,6 @@ class User(db.Model):
 
 
 class Category(db.Model):
-    """Category model - synced from Django library_app_bookcategory table."""
     __tablename__ = 'library_app_bookcategory'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -45,7 +57,6 @@ class Category(db.Model):
 
 
 class Book(db.Model):
-    """Book model - synced from Django library_app_book table."""
     __tablename__ = 'library_app_book'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -62,7 +73,6 @@ class Book(db.Model):
 
 
 class Borrowing(db.Model):
-    """Borrowing model - synced from Django library_app_borrowrecord table."""
     __tablename__ = 'library_app_borrowrecord'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -79,13 +89,12 @@ class Borrowing(db.Model):
 
 
 class Review(db.Model):
-    """Review model - synced from Django library_app_review table."""
     __tablename__ = 'library_app_review'
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     book_id = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Integer, nullable=False)  # 1-5 stars
+    rating = db.Column(db.Integer, nullable=False)  
     comment = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -94,7 +103,6 @@ class Review(db.Model):
 
 # Analytics helper functions for common queries
 def get_top_books_by_borrowings(limit=10):
-    """Get most borrowed books with their details."""
     from sqlalchemy import text
     
     query = text("""
@@ -105,8 +113,9 @@ def get_top_books_by_borrowings(limit=10):
             b.cover_image,
             COUNT(br.id) as borrow_count
         FROM library_app_book b
-        LEFT JOIN library_app_borrowrecord br ON b.id = br.book_id
+        INNER JOIN library_app_borrowrecord br ON b.id = br.book_id
         GROUP BY b.id, b.title, b.author, b.cover_image
+        HAVING COUNT(br.id) >= 1
         ORDER BY borrow_count DESC
         LIMIT :limit
     """)
@@ -116,7 +125,7 @@ def get_top_books_by_borrowings(limit=10):
 
 
 def get_top_books_by_ratings(limit=10):
-    """Get top rated books with minimum 2 reviews."""
+    """Get top rated books with minimum 1 review."""
     from sqlalchemy import text
     
     query = text("""
@@ -125,12 +134,12 @@ def get_top_books_by_ratings(limit=10):
             b.title,
             b.author,
             b.cover_image,
-            AVG(r.rating::float) as avg_rating,
+            AVG(CAST(r.rating AS FLOAT)) as avg_rating,
             COUNT(r.id) as review_count
         FROM library_app_book b
-        LEFT JOIN library_app_review r ON b.id = r.book_id
+        INNER JOIN library_app_review r ON b.id = r.book_id
         GROUP BY b.id, b.title, b.author, b.cover_image
-        HAVING COUNT(r.id) >= 2
+        HAVING COUNT(r.id) >= 1
         ORDER BY avg_rating DESC, review_count DESC
         LIMIT :limit
     """)
@@ -140,7 +149,6 @@ def get_top_books_by_ratings(limit=10):
 
 
 def get_borrowing_stats():
-    """Get general borrowing statistics."""
     from sqlalchemy import text
     
     query = text("""
