@@ -1,7 +1,7 @@
 from models import db, get_top_books_by_BorrowRecords, get_top_books_by_ratings, get_BorrowRecord_stats
 from datetime import datetime
 import calendar
-from models import BorrowRecord, Book, Category, User, Review
+from models import BorrowRecord, Book
 from sqlalchemy import func, extract
 from database import db
 
@@ -53,12 +53,6 @@ class AnalyticsService:
         """
         Get top books by average rating (minimum 1 review).
         
-        FLOW:
-        1. Call SQL query to get books with average ratings
-        2. Transform raw database results into structured data  
-        3. Calculate overall statistics
-        4. Return formatted response for React frontend
-        
         Args:
             limit (int): Number of top books to return
             
@@ -101,9 +95,6 @@ class AnalyticsService:
             year = datetime.now().year
         
         try:
-            # Get model classes
-            BorrowRecord, Book, BookCategory, User = get_models()
-            
             # Query to get monthly borrow counts
             monthly_data = db.session.query(
                 extract('month', BorrowRecord.borrow_date).label('month'),
