@@ -4,6 +4,8 @@ from flask_cors import CORS
 from config import Config
 from database import db
 from dotenv import load_dotenv
+from flask import request
+from services import AnalyticsService
 
 load_dotenv()
 
@@ -16,7 +18,6 @@ def create_app(config_class=Config):
     CORS(app) 
     register_routes(app)
     
-    # Create database tables
     with app.app_context():
         db.create_all()
     
@@ -40,7 +41,8 @@ def register_routes(app):
             'description': 'Microservice for library management analytics',
             'endpoints': [
                 '/analytics/borrowed-per-month',
-                '/analytics/top-10-books', 
+                '/analytics/top-books-by-borrowings', 
+                '/analytics/top-books-by-ratings',
                 '/analytics/borrowed-by-category',
                 '/analytics/borrowed-vs-returned'
             ],
@@ -50,8 +52,7 @@ def register_routes(app):
     
     @app.route('/analytics/borrowed-per-month', methods=['GET'])
     def borrowed_per_month():
-        from flask import request
-        from services import AnalyticsService
+
         
         try:
             year = request.args.get('year', type=int)
@@ -69,6 +70,73 @@ def register_routes(app):
                 'error': str(e),
                 'message': 'Failed to retrieve monthly borrowing statistics'
             }), 500
+
+    @app.route('/analytics/top-books-by-borrowings', methods=['GET'])
+    def top_books_by_borrowings():
+        """Get top books ranked by number of borrowings."""
+        from flask import request
+        from services import AnalyticsService
+        
+        try:
+            limit = request.args.get('limit', default=10, type=int)
+            if limit > 50:  # Prevent excessive queries
+                limit = 50
+                
+            data = AnalyticsService.get_top_books_by_borrowings(limit)
+            
+            if data['success']:
+                return jsonify({
+                    'success': True,
+                    'data': data,
+                    'message': f'Top {len(data["books"])} books by borrowings'
+                }), 200
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': data['error'],
+                    'message': 'Failed to retrieve top books by borrowings'
+                }), 500
+                
+        except Exception as e:
+            return jsonify({
+                'success': False,
+                'error': str(e),
+                'message': 'Failed to retrieve top books by borrowings'
+            }), 500
+
+    @app.route('/analytics/top-books-by-ratings', methods=['GET'])
+    def top_books_by_ratings():
+        """Get top books ranked by average ratings."""
+        from flask import request
+        from services import AnalyticsService
+        
+        try:
+            limit = request.args.get('limit', default=10, type=int)
+            if limit > 50:  # Prevent excessive queries
+                limit = 50
+                
+            data = AnalyticsService.get_top_books_by_ratings(limit)
+            
+            if data['success']:
+                return jsonify({
+                    'success': True,
+                    'data': data,
+                    'message': f'Top {len(data["books"])} books by ratings'
+                }), 200
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': data['error'],
+                    'message': 'Failed to retrieve top books by ratings'
+                }), 500
+                
+        except Exception as e:
+            return jsonify({
+                'success': False,
+                'error': str(e),
+                'message': 'Failed to retrieve top books by ratings'
+            }), 500
+
 
 if __name__ == '__main__':
     app = create_app()

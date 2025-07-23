@@ -12,6 +12,7 @@ venv/
 ENV/
 *.env
 *.egg-info/
+db.sqlite3
 
 # Flask Analytics
 analytics/.env

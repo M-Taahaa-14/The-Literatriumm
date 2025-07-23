@@ -1,8 +1,10 @@
 # Analytics Microservice - Flask
 
-This microservice handles analytics and reporting for the library management system.
+This microservice provides real-time analytics and reporting for the library management system with secure configuration management.
 
-## Setup Instructions
+## 🔐 Security First Setup
+
+**Important**: This project uses environment variables for all sensitive data. Never commit secrets to git!
 
 ### 1. Install Dependencies
 ```bash
@@ -13,8 +15,14 @@ pip install -r requirements.txt
 ### 2. Environment Configuration
 ```bash
 cp .env.example .env
-# Edit .env with your database credentials
+# Edit .env with your actual database credentials and secrets
 ```
+
+**Required Environment Variables:**
+- `SECRET_KEY` - Flask secret key for security
+- `DATABASE_URL` - PostgreSQL connection string
+
+See `ENVIRONMENT_SETUP.md` for complete configuration guide.
 
 ### 3. Database Setup
 Make sure PostgreSQL is running and create the database:
@@ -85,222 +93,70 @@ All analytics endpoints return data in the format:
 }
 ```
 
+### Top Books Endpoints Format
+Top books endpoints return additional metadata:
+```json
+{
+  "labels": ["Book Title 1", "Book Title 2", ...],
+  "values": [count1, count2, ...],
+  "book_details": [
+    {
+      "id": 1,
+      "title": "Book Title",
+      "author": "Author Name",
+      "cover_image": "http://localhost:8000/media/book_covers/cover.jpg",
+      "borrowing_count": 15,
+      "average_rating": 4.5
+    }
+  ]
+}
+```
+
 ## Database Models
-- `User` - User information (mirrors Django model)
-- `Category` - Book categories
-- `Book` - Book information with category relationship
-- `Borrowing` - Core borrowing records for analytics
+- `User` - User information (synced from Django)
+- `Category` - Book categories (synced from Django)
+- `Book` - Book information with category relationship (synced from Django)
+- `Borrowing` - Core borrowing records for analytics (synced from Django)
+- `Review` - Book reviews with ratings (synced from Django)
 
 ## Data Synchronization
+The analytics database is automatically synchronized with the main Django database using Django signals. When data changes in the main application, it's immediately reflected in the analytics database for real-time reporting.
 
-### Real-time Sync (Recommended)
-Django signals automatically sync data to PostgreSQL when records are created or updated:
-- Copy `django_signals.py` to your Django app
-- Add analytics database settings to Django settings.py
-- Enable sync with `ENABLE_ANALYTICS_SYNC = True`
-
-### Manual Sync
-Run the sync script to transfer existing data:
-```bash
-cd analytics
-python sync_data.py
-```
-
-### Sync Strategy
-- **SQLite (Django)**: Primary operational database
-- **PostgreSQL (Analytics)**: Read-only analytics database
-- **Data Flow**: Django → PostgreSQL (one-way sync)
-- **Operations**: Insert and Read only (no updates/deletes in analytics DB)
-
-## Development
-- The service uses Flask application factory pattern
-- SQLAlchemy for ORM
+## Development Features
+- Flask application factory pattern for modular design
+- SQLAlchemy ORM with raw SQL for performance-critical queries
 - CORS enabled for React frontend integration
 - PostgreSQL for analytics data storage
+- Environment-based configuration for security
+- Real-time data sync from Django via signals
+- Comprehensive error handling and logging
 
-## 🚀 Development Setup & Workflow
+## 🔒 Security & GitHub Safety
 
-### Current Implementation Status
-```
-Feature Status: 🟢 IMPLEMENTATION COMPLETE ✅
-Dependencies: 🟢 INSTALLED & TESTED ✅  
-Flask App: � WORKING PERFECTLY ✅
-Endpoints: 🟢 ALL FUNCTIONAL ✅
-Testing Status: 🟢 PASSING ✅
-Database Status: 🟡 POSTGRESQL SETUP PENDING  
-Documentation: 🟢 COMPLETE ✅
-Commit Ready: � READY FOR DATABASE TESTING ✅
-```
+This project is designed to be **GitHub-safe** with no hardcoded secrets:
 
-### ✅ What's Been Accomplished
-- ✅ **Borrowed-per-month endpoint** structure complete and tested
-- ✅ **Import issues fixed** - all modules work together properly
-- ✅ **Database models** defined and ready
-- ✅ **Data synchronization strategy** implemented
-- ✅ **Error handling** with fallback responses working
-- ✅ **Comprehensive tests** written and passing
-- ✅ **Documentation** updated and complete
-- ✅ **Flask dependencies** installed and compatible
-- ✅ **All endpoints** tested and functional
-- ✅ **Query parameters** working correctly
+✅ **What's Safe to Commit:**
+- `config.py` - Only contains environment variable references
+- `.env.example` - Template with example values
+- All application code - No hardcoded credentials
 
-### Structure Validation
-All code has been tested and validated:
+❌ **Never Commit:**
+- `.env` - Contains your actual secrets (automatically ignored by git)
+- Any files with real database passwords or API keys
+
+### Verification Before Push:
 ```bash
-cd analytics
-python test_structure.py
-# Result: 🎉 All structure tests passed!
+# Verify .env is ignored
+git check-ignore analytics/.env
 
-python test_endpoints.py 
-# Result: ✅ All endpoints working perfectly
-
-python test_simple.py
-# Result: ✅ All functionality tests passed
+# Check for any secrets in staged files
+git diff --cached | grep -i "password\|secret\|key"
 ```
 
-**✅ Verified Working Features:**
-- Health check endpoint (`/health`)
-- Analytics info endpoint (`/analytics`) 
-- Monthly borrowing statistics (`/analytics/borrowed-per-month`)
-- Year parameter filtering (`?year=2024`)
-- Error handling with graceful fallbacks
-- Proper JSON response format for frontend consumption
+## Frontend Integration
 
-## 📋 Development Sessions Plan
-
-### Session 1: Environment Setup
-```bash
-# 1. Install Python dependencies
-pip install -r analytics/requirements.txt
-
-# 2. Set up PostgreSQL database
-# Make sure PostgreSQL is installed and running
-createdb library_analytics
-
-# 3. Configure environment variables
-cp analytics/.env.example analytics/.env
-# Edit .env with your PostgreSQL credentials:
-# - DB_HOST=localhost
-# - DB_PORT=5432
-# - DB_NAME=library_analytics
-# - DB_USER=postgres
-# - DB_PASSWORD=your_password
-
-# 4. Test the Flask app
-cd analytics
-python app.py
-# Should start on http://localhost:5001
-```
-
-### Session 2: Testing & Integration
-```bash
-# Test health endpoints
-curl http://localhost:5001/health
-curl http://localhost:5001/analytics
-
-# Test the main analytics endpoint
-curl http://localhost:5001/analytics/borrowed-per-month
-
-# Test with parameters
-curl "http://localhost:5001/analytics/borrowed-per-month?year=2024"
-
-# Run the test suite (requires pytest installation)
-pytest test_borrowed_per_month.py -v
-
-# Test data synchronization (requires Django data)
-python sync_data.py
-```
-
-### Session 3: Feature Branch Completion
-```bash
-# When everything works and tests pass:
-git add analytics/
-git commit -m "feat: implement borrowed-per-month analytics endpoint
-
-- Add monthly borrowing statistics endpoint
-- Implement PostgreSQL data models
-- Add data synchronization from Django SQLite
-- Include comprehensive test suite
-- Add error handling with graceful fallbacks
-- Support year parameter filtering
-- Return chart-ready JSON format"
-
-git push origin feature/borrowings_per_month
-
-# Create Pull Request to development branch
-# After review and approval, merge to development
-# Continue with next analytics feature
-```
-
-## 🔧 Troubleshooting Setup
-
-### Common Issues & Solutions
-
-**1. Import Errors (Flask/SQLAlchemy not found)**
-```bash
-# Solution: Install requirements
-pip install -r requirements.txt
-```
-
-**2. PostgreSQL Connection Error**
-```bash
-# Solution: Check PostgreSQL is running
-# On Windows: Check Services for PostgreSQL
-# On Mac: brew services start postgresql
-# On Linux: sudo systemctl start postgresql
-
-# Verify database exists
-psql -U postgres -l | grep library_analytics
-```
-
-**3. "No module named 'psycopg2'" Error**
-```bash
-# Solution: Install PostgreSQL adapter
-pip install psycopg2-binary
-```
-
-**4. Database Schema Not Created**
-```bash
-# Solution: Run Flask app once to create tables
-cd analytics
-python app.py
-# Tables will be created automatically on first run
-```
-
-## 🎯 Next Features (Future Sessions)
-
-After completing the borrowed-per-month feature:
-
-1. **`feature/top-10-books`** - Most borrowed books analytics
-2. **`feature/borrowed-by-category`** - Category-wise borrowing statistics  
-3. **`feature/borrowed-vs-returned`** - Return rate analytics
-
-Each feature will follow the same workflow:
-```bash
-git checkout development
-git pull origin development
-git checkout -b feature/feature-name
-# Implement feature
-# Test thoroughly
-# Commit and create PR
-```
-
-## 📊 Production Deployment Notes
-
-### Environment Variables for Production
-```bash
-# Required for production
-FLASK_ENV=production
-SECRET_KEY=your-secure-secret-key
-DATABASE_URL=postgresql://user:pass@host:port/dbname
-
-# Optional optimizations
-ANALYTICS_CACHE_TIMEOUT=600
-MAX_RECORDS_PER_QUERY=5000
-```
-
-### Production Server
-```bash
-# Use Gunicorn for production
-gunicorn -w 4 -b 0.0.0.0:5001 app:app
-```
+The React frontend (`TopBooksPage.js`) integrates with these endpoints to display:
+- Interactive bar charts for top books by borrowings
+- Doughnut charts for top books by ratings  
+- Book cover images and metadata
+- Tabbed interface for different ranking methods

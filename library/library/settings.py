@@ -45,13 +45,15 @@ INSTALLED_APPS = [
     'library_api',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',  # Add CORS support
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Add CORS middleware (must be first)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # DISABLE CSRF for API
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -115,7 +117,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',  # Change to AllowAny to allow login/signup
     ]
 }
 
@@ -153,3 +155,36 @@ ANALYTICS_DB_PORT = '5432'
 ANALYTICS_DB_NAME = 'analytics_db'
 ANALYTICS_DB_USER = 'postgres'
 ANALYTICS_DB_PASSWORD = 'postgres'
+
+# CORS Configuration for React Frontend
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = False  # Set to True only for development
+
+# CORS Headers that are allowed
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Disable CSRF for API endpoints
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# For development only - disable CSRF on API
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
