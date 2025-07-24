@@ -7,7 +7,8 @@ from .views import (
     BookAdminViewSet, BookCategoryAdminViewSet, SignupAPIView, AdminDashboardAPIView,
     SearchBooksAPIView, BooksByCategoryAPIView, MyBorrowingsAPIView,
     ReviewListAdminAPIView, ReviewDeleteAdminAPIView,
-    AdminBorrowingListAPIView, AdminBorrowingActionAPIView
+    AdminBorrowingListAPIView, AdminBorrowingActionAPIView,
+    TopRatedBooksAPIView, MostBorrowedBooksAPIView, CategoriesWithBooksAPIView, HomePageStatsAPIView
 )
 from rest_framework.routers import DefaultRouter
 
@@ -38,6 +39,12 @@ urlpatterns = [
     path('admin/reviews/<int:review_id>/delete/', ReviewDeleteAdminAPIView.as_view(), name='api_admin_review_delete'),
     path('admin/borrowings/', AdminBorrowingListAPIView.as_view(), name='api_admin_borrowings'),
     path('admin/borrowings/action/', AdminBorrowingActionAPIView.as_view(), name='api_admin_borrowing_action'),
+    
+    # Home page endpoints
+    path('home/top-rated/', TopRatedBooksAPIView.as_view(), name='api_top_rated_books'),
+    path('home/most-borrowed/', MostBorrowedBooksAPIView.as_view(), name='api_most_borrowed_books'),
+    path('home/categories-with-books/', CategoriesWithBooksAPIView.as_view(), name='api_categories_with_books'),
+    path('home/stats/', HomePageStatsAPIView.as_view(), name='api_home_stats'),
 ]
 
 urlpatterns += router.urls

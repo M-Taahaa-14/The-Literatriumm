@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const BOOKS_PER_PAGE = 4;
 
@@ -14,8 +14,16 @@ function BookListPage() {
     const [loading, setLoading] = useState(true);
     const [borrowMsg, setBorrowMsg] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+        // Check for category parameter in URL
+        const searchParams = new URLSearchParams(location.search);
+        const categoryParam = searchParams.get('category');
+        if (categoryParam) {
+            setSelectedCategory(categoryParam);
+        }
+
         setLoading(true);
         Promise.all([
             api.get('books/'),
@@ -31,7 +39,7 @@ function BookListPage() {
             setTotalPages(1);
             setLoading(false);
         });
-    }, []);
+    }, [location.search]);
 
     const filteredBooks = books.filter(book => {
         let match = true;

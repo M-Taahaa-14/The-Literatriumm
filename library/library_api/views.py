@@ -270,3 +270,118 @@ class ReviewDeleteAdminAPIView(APIView):
         review = get_object_or_404(Review, id=review_id)
         review.delete()
         return Response({'status': 'deleted'})
+
+
+# Enhanced Home Page APIs
+class TopRatedBooksAPIView(APIView):
+    """Get top-rated books with their average ratings"""
+    permission_classes = []
+    
+    def get(self, request):
+        from django.db.models import Avg, Count
+        
+        # Get books with reviews, ordered by average rating
+        books = Book.objects.annotate(
+            avg_rating=Avg('reviews__rating'),
+            review_count=Count('reviews')
+        ).filter(
+            review_count__gt=0  # Only books with at least 1 review
+        ).order_by('-avg_rating', '-review_count')[:6]  # Top 6 books
+        
+        data = []
+        for book in books:
+            data.append({
+                'id': book.id,
+                'title': book.title,
+                'author': book.author,
+                'category': book.category.name,
+                'cover_image': book.cover_image.url if book.cover_image else None,
+                'average_rating': round(book.avg_rating, 1) if book.avg_rating else 0,
+                'review_count': book.review_count,
+                'available_copies': book.available_copies
+            })
+        
+        return Response(data)
+
+
+class MostBorrowedBooksAPIView(APIView):
+    """Get most borrowed books"""
+    permission_classes = []
+    
+    def get(self, request):
+        from django.db.models import Count
+        
+        # Get books ordered by borrow count
+        books = Book.objects.annotate(
+            borrow_count=Count('borrowrecord')
+        ).filter(
+            borrow_count__gt=0  # Only books that have been borrowed
+        ).order_by('-borrow_count')[:6]  # Top 6 most borrowed
+        
+        data = []
+        for book in books:
+            data.append({
+                'id': book.id,
+                'title': book.title,
+                'author': book.author,
+                'category': book.category.name,
+                'cover_image': book.cover_image.url if book.cover_image else None,
+                'borrow_count': book.borrow_count,
+                'available_copies': book.available_copies,
+                'average_rating': book.average_rating
+            })
+        
+        return Response(data)
+
+
+class CategoriesWithBooksAPIView(APIView):
+    """Get categories with their books"""
+    permission_classes = []
+    
+    def get(self, request):
+        categories = BookCategory.objects.prefetch_related('book_set').all()
+        
+        data = []
+        for category in categories:
+            books = category.book_set.all()[:4]  # First 4 books per category
+            
+            category_data = {
+                'id': category.id,
+                'name': category.name,
+                'total_books': category.book_set.count(),
+                'books': []
+            }
+            
+            for book in books:
+                category_data['books'].append({
+                    'id': book.id,
+                    'title': book.title,
+                    'author': book.author,
+                    'cover_image': book.cover_image.url if book.cover_image else None,
+                    'available_copies': book.available_copies,
+                    'average_rating': book.average_rating
+                })
+            
+            data.append(category_data)
+        
+        return Response(data)
+
+
+class HomePageStatsAPIView(APIView):
+    """Get general stats for home page"""
+    permission_classes = []
+    
+    def get(self, request):
+        from django.db.models import Count, Avg
+        
+        total_books = Book.objects.count()
+        total_categories = BookCategory.objects.count()
+        total_borrowings = BorrowRecord.objects.count()
+        avg_rating = Review.objects.aggregate(avg=Avg('rating'))['avg']
+        
+        return Response({
+            'total_books': total_books,
+            'total_categories': total_categories,
+            'total_borrowings': total_borrowings,
+            'average_rating': round(avg_rating, 1) if avg_rating else 0
+        })
