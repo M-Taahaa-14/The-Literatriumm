@@ -142,65 +142,83 @@ class Review(db.Model):
                 func.extract('month', BorrowRecord.borrow_date)
             ).order_by('month').all()
     
-    # Analytics helper functions for common queries
-def get_top_books_by_borrowings(limit=10):
-        from sqlalchemy import text
+#     # Analytics helper functions for common queries
+# def get_top_books_by_borrowings(limit=10):
+#         from sqlalchemy import text
         
-        query = text("""
-            SELECT 
-                b.id,
-                b.title,
-                b.author,
-                b.cover_image,
-                COUNT(br.id) as borrow_count
-            FROM library_app_book b
-            INNER JOIN library_app_borrowrecord br ON b.id = br.book_id
-            GROUP BY b.id, b.title, b.author, b.cover_image
-            HAVING COUNT(br.id) >= 1
-            ORDER BY borrow_count DESC
-            LIMIT :limit
-        """)
+#         query = text("""
+#             SELECT 
+#                 b.id,
+#                 b.title,
+#                 b.author,
+#                 b.cover_image,
+#                 COUNT(br.id) as borrow_count
+#             FROM library_app_book b
+#             INNER JOIN library_app_borrowrecord br ON b.id = br.book_id
+#             GROUP BY b.id, b.title, b.author, b.cover_image
+#             HAVING COUNT(br.id) >= 1
+#             ORDER BY borrow_count DESC
+#             LIMIT :limit
+#         """)
         
-        result = db.session.execute(query, {'limit': limit})
-        return result.fetchall()
+#         result = db.session.execute(query, {'limit': limit})
+#         return result.fetchall()
 
 
-def get_top_books_by_ratings(limit=10):
-        """Get top rated books with minimum 1 review."""
-        from sqlalchemy import text
+# def get_top_books_by_ratings(limit=10):
+#         """Get top rated books with minimum 1 review."""
+#         from sqlalchemy import text
         
-        query = text("""
-            SELECT 
-                b.id,
-                b.title,
-                b.author,
-                b.cover_image,
-                AVG(CAST(r.rating AS FLOAT)) as avg_rating,
-                COUNT(r.id) as review_count
-            FROM library_app_book b
-            INNER JOIN library_app_review r ON b.id = r.book_id
-            GROUP BY b.id, b.title, b.author, b.cover_image
-            HAVING COUNT(r.id) >= 1
-            ORDER BY avg_rating DESC, review_count DESC
-            LIMIT :limit
-        """)
+#         query = text("""
+#             SELECT 
+#                 b.id,
+#                 b.title,
+#                 b.author,
+#                 b.cover_image,
+#                 AVG(CAST(r.rating AS FLOAT)) as avg_rating,
+#                 COUNT(r.id) as review_count
+#             FROM library_app_book b
+#             INNER JOIN library_app_review r ON b.id = r.book_id
+#             GROUP BY b.id, b.title, b.author, b.cover_image
+#             HAVING COUNT(r.id) >= 1
+#             ORDER BY avg_rating DESC, review_count DESC
+#             LIMIT :limit
+#         """)
         
-        result = db.session.execute(query, {'limit': limit})
-        return result.fetchall()
+#         result = db.session.execute(query, {'limit': limit})
+#         return result.fetchall()
 
 
-def get_borrowing_stats():
-        from sqlalchemy import text
+# def get_borrowing_stats():
+#         from sqlalchemy import text
         
-        query = text("""
-            SELECT 
-                COUNT(*) as total_borrowings,
-                COUNT(CASE WHEN is_returned = true THEN 1 END) as returned_books,
-                COUNT(CASE WHEN is_returned = false THEN 1 END) as currently_borrowed
-            FROM library_app_borrowrecord
-        """)
+#         query = text("""
+#             SELECT 
+#                 COUNT(*) as total_borrowings,
+#                 COUNT(CASE WHEN is_returned = true THEN 1 END) as returned_books,
+#                 COUNT(CASE WHEN is_returned = false THEN 1 END) as currently_borrowed
+#             FROM library_app_borrowrecord
+#         """)
         
-        result = db.session.execute(query)
-        return result.fetchone()
+#         result = db.session.execute(query)
+#         return result.fetchone()
+
+
+# def get_borrowed_per_month(year):
+#     """Get monthly borrowing counts for a specific year."""
+#     from sqlalchemy import text
+    
+#     query = text("""
+#         SELECT 
+#             EXTRACT(month FROM borrow_date) as month,
+#             COUNT(*) as count
+#         FROM library_app_borrowrecord
+#         WHERE EXTRACT(year FROM borrow_date) = :year
+#         GROUP BY EXTRACT(month FROM borrow_date)
+#         ORDER BY month
+#     """)
+    
+#     result = db.session.execute(query, {'year': year})
+#     return result.fetchall()
 
         

@@ -76,6 +76,7 @@ class PostgreSQLSyncHandler:
         finally:
             conn.close()
     
+
     def sync_category(self, category_instance):
         """Sync category to PostgreSQL."""
         conn = self.get_connection()
@@ -102,6 +103,8 @@ class PostgreSQLSyncHandler:
         finally:
             conn.close()
     
+
+
     def sync_book(self, book_instance):
         """Sync book to PostgreSQL."""
         conn = self.get_connection()
@@ -140,6 +143,8 @@ class PostgreSQLSyncHandler:
             logger.error(f"Failed to sync book {book_instance.id}: {e}")
         finally:
             conn.close()
+    
+
     
     def sync_borrowing(self, borrowing_instance):
         """Sync borrowing to PostgreSQL - CRITICAL for analytics."""

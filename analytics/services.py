@@ -1,7 +1,64 @@
-from models import db, BorrowRecord, get_top_books_by_borrowings, get_top_books_by_ratings, get_borrowing_stats
+from models import db
 from datetime import datetime
 import calendar
-from sqlalchemy import func, extract
+from sqlalchemy import func, extract, text
+
+
+def get_top_books_by_borrowings_query(limit=10):
+    """Raw SQL query for top books by borrowings."""
+    query = text("""
+        SELECT 
+            b.id,
+            b.title,
+            b.author,
+            b.cover_image,
+            COUNT(br.id) as borrow_count
+        FROM library_app_book b
+        INNER JOIN library_app_borrowrecord br ON b.id = br.book_id
+        GROUP BY b.id, b.title, b.author, b.cover_image
+        HAVING COUNT(br.id) >= 1
+        ORDER BY borrow_count DESC
+        LIMIT :limit
+    """)
+    result = db.session.execute(query, {'limit': limit})
+    return result.fetchall()
+
+
+def get_top_books_by_ratings_query(limit=10):
+    """Raw SQL query for top books by ratings."""
+    query = text("""
+        SELECT 
+            b.id,
+            b.title,
+            b.author,
+            b.cover_image,
+            AVG(CAST(r.rating AS FLOAT)) as avg_rating,
+            COUNT(r.id) as review_count
+        FROM library_app_book b
+        INNER JOIN library_app_review r ON b.id = r.book_id
+        GROUP BY b.id, b.title, b.author, b.cover_image
+        HAVING COUNT(r.id) >= 1
+        ORDER BY avg_rating DESC, review_count DESC
+        LIMIT :limit
+    """)
+    result = db.session.execute(query, {'limit': limit})
+    return result.fetchall()
+
+
+def get_borrowed_per_month_query(year):
+    """Raw SQL query for monthly borrowing data."""
+    query = text("""
+        SELECT 
+            EXTRACT(month FROM borrow_date) as month,
+            COUNT(*) as count
+        FROM library_app_borrowrecord
+        WHERE EXTRACT(year FROM borrow_date) = :year
+        GROUP BY EXTRACT(month FROM borrow_date)
+        ORDER BY month
+    """)
+    result = db.session.execute(query, {'year': year})
+    return result.fetchall()
+
 
 class AnalyticsService:
 
@@ -17,8 +74,8 @@ class AnalyticsService:
             dict: Book details with borrowing counts
         """
         try:
-            # STEP 1: Fetch data from database
-            top_books = get_top_books_by_borrowings(limit)
+            # STEP 1: Get data using query function
+            top_books = get_top_books_by_borrowings_query(limit)
             
             # STEP 2: Transform each book record into frontend-friendly format
             books_data = []
@@ -67,8 +124,8 @@ class AnalyticsService:
         """
 
         try:
-            # STEP 1: Get raw data from database
-            top_books = get_top_books_by_ratings(limit)
+            # STEP 1: Get data using query function
+            top_books = get_top_books_by_ratings_query(limit)
 
             # STEP 2: Transform each book record into frontend-friendly format
             books_data = []
@@ -123,24 +180,17 @@ class AnalyticsService:
             year = datetime.now().year
         
         try:
-            # Query to get monthly borrow counts
-            monthly_data = db.session.query(
-                extract('month', BorrowRecord.borrow_date).label('month'),
-                func.count(BorrowRecord.id).label('count')
-            ).filter(
-                extract('year', BorrowRecord.borrow_date) == year
-            ).group_by(
-                extract('month', BorrowRecord.borrow_date)
-            ).order_by('month').all()
+            # STEP 1: Get data using query function
+            monthly_data = get_borrowed_per_month_query(year)
             
-            # Initialize all months with 0 counts
+            # STEP 2: Initialize all months with 0 counts
             month_counts = {i: 0 for i in range(1, 13)}
             
-            # Fill in actual data
-            for month, count in monthly_data:
-                month_counts[int(month)] = int(count)
+            # STEP 3: Fill in actual data
+            for row in monthly_data:
+                month_counts[int(row.month)] = int(row.count)
             
-            # Convert to labels and values for frontend
+            # STEP 4: Convert to labels and values for frontend
             labels = [calendar.month_name[i] for i in range(1, 13)]
             values = [month_counts[i] for i in range(1, 13)]
             
