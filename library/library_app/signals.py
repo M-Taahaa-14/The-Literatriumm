@@ -18,11 +18,11 @@ class PostgreSQLSyncHandler:
     
     def __init__(self):
         self.postgres_config = {
-            'host': getattr(settings, 'ANALYTICS_DB_HOST', 'localhost'),
-            'port': getattr(settings, 'ANALYTICS_DB_PORT', '5432'),
-            'database': getattr(settings, 'ANALYTICS_DB_NAME', 'library_analytics'),
-            'user': getattr(settings, 'ANALYTICS_DB_USER', 'postgres'),
-            'password': getattr(settings, 'ANALYTICS_DB_PASSWORD', 'password')
+            'host': getattr(settings, 'ANALYTICS_DB_HOST'),
+            'port': getattr(settings, 'ANALYTICS_DB_PORT'),
+            'database': getattr(settings, 'ANALYTICS_DB_NAME'),
+            'user': getattr(settings, 'ANALYTICS_DB_USER'),
+            'password': getattr(settings, 'ANALYTICS_DB_PASSWORD')
         }
         self.enabled = getattr(settings, 'ENABLE_ANALYTICS_SYNC', False)
     
