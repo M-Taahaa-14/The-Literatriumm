@@ -1,0 +1,198 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$3JK82frYxAfqgnYk1wA4xU$pu/lgFvvZDslYrUWEpbprWa8a0b7d3HVNHvd9cZM6O4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Zubair06",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T13:38:47.326Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$g6QyGpNEWKL1dqu9D2Rad5$GzzoJdFNv+GZwGUdqgZLurRyoJOEy+LsLW1175Dr34o=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:32:12.396Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$81rh1u975z6B7ykoJ0cUW9$euq2WxWBLMEKXwA7+sB3zEOLIL9+P8AT2JUMCOogoVo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "UsamaAteeq007",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:43:16.214Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$zPe7gZ1nyuycTscczZP44H$a5VnLe74h8rNjVMNaTm10Q6NiKY0JlnhfVEVBYOHZ9w=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "asma09",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:43:38.971Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$gDtdOKJB7k40tGoKYdAjsG$2iQyKRiF+yd52z3lVzzaxp6r7gsFgPzas7r8GtIfHSw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "DuaZubair10",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:43:57.838Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$vjCULDI5OAN5tdozwQ8mhF$EpxFdQwhUI2+QaganFShq931QyzFnuT/7jTUhY3Gfug=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Adil007",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:44:23.793Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$8KUz7FhK9OO0Jvy23bf3tT$7fNxA6lD4ootVO5bmQ6VrvXz4eH/TJlPoU3Y6NzyQSw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Taahaa",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-23T16:45:03.126Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "full_name": "Muhammad Zubair",
+    "address": "Hassan Parwana, Multan",
+    "phone": "03336194455"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "full_name": "Admin User",
+    "address": "Systems Limited",
+    "phone": "03001122334"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": 3,
+    "full_name": "Usama Ateeq",
+    "address": "Faisal Town, Lahore.",
+    "phone": "03249875012"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 4,
+  "fields": {
+    "user": 4,
+    "full_name": "Asma Sikandar",
+    "address": "Eden Value Homes",
+    "phone": "03146113644"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 5,
+  "fields": {
+    "user": 5,
+    "full_name": "Dua Zubair",
+    "address": "Eden Value Homes",
+    "phone": "03336194458"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 6,
+  "fields": {
+    "user": 6,
+    "full_name": "Adil Sikander",
+    "address": "Oversea B, Bahria Town Lahore.",
+    "phone": "03162704561"
+  }
+},
+{
+  "model": "library_app.userprofile",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "full_name": "Muhammad Taahaa",
+    "address": "Block C Street 10 House 50 Eden Value Homes",
+    "phone": "03204884375"
+  }
+}
+]
