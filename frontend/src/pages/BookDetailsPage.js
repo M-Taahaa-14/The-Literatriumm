@@ -208,39 +208,52 @@ function BookDetailsPage() {
                     <p><strong>Available Copies:</strong> {book.available_copies}</p>
                     <p><strong>Total Copies:</strong> {book.total_copies}</p>
                     <p><strong>ISBN:</strong> {book.isbn}</p>
-                </div>
-            </div>
-            <h4>Reviews</h4>
-            <div className="mb-4">
-                {reviews.length === 0 && <p>No reviews yet.</p>}
-                {reviews.map(r => (
-                    <div className="card mb-2" key={r.id}>
-                        <div className="card-body">
-                            <div className="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <strong>Rating:</strong> {r.rating}/5 ⭐<br />
-                                    <small className="text-muted">By {r.user_name || 'Anonymous'}</small>
-                                </div>
-                                <div className="d-flex align-items-center gap-2">
-                                    {currentUserId && (r.user === currentUserId || r.user_name === currentUsername) && (
-                                        <button 
-                                            className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleEditClick(r)}
-                                            disabled={isEditing}
-                                        >
-                                            <i className="bi bi-pencil"></i> Edit
-                                        </button>
-                                    )}
-                                    <small className="text-muted">
-                                        {new Date(r.created_at).toLocaleDateString()}
-                                    </small>
+                    
+                    <hr className="my-4" />
+                    
+                    <h4>Reviews</h4>
+                    <div className="mb-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                        {reviews.length === 0 && <p>No reviews yet.</p>}
+                        {reviews.map(r => (
+                            <div className="card mb-2" key={r.id}>
+                                <div className="card-body p-3">
+                                    <div className="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div className="d-flex align-items-center mb-1">
+                                                <span style={{ fontSize: '1rem', color: '#ffc107' }}>
+                                                    {[1, 2, 3, 4, 5].map(star => (
+                                                        <span key={star}>
+                                                            {star <= r.rating ? '★' : '☆'}
+                                                        </span>
+                                                    ))}
+                                                </span>
+                                                <span className="ms-2 text-muted">({r.rating}/5)</span>
+                                            </div>
+                                            <small className="text-muted">By {r.user_name || 'Anonymous'}</small>
+                                        </div>
+                                        <div className="d-flex align-items-center gap-2">
+                                            {currentUserId && (r.user === currentUserId || r.user_name === currentUsername) && (
+                                                <button 
+                                                    className="btn btn-outline-primary btn-sm"
+                                                    onClick={() => handleEditClick(r)}
+                                                    disabled={isEditing}
+                                                >
+                                                    <i className="bi bi-pencil"></i> Edit
+                                                </button>
+                                            )}
+                                            <small className="text-muted">
+                                                {new Date(r.created_at).toLocaleDateString()}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <p className="mt-2 mb-0 small">{r.content}</p>
                                 </div>
                             </div>
-                            <p className="mt-2 mb-0">{r.content}</p>
-                        </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
+            
             <h5>{userReview && isEditing ? 'Edit Your Review' : userReview ? 'Add a Review' : 'Add a Review'}</h5>
             {error && <div className="alert alert-danger">{error}</div>}
             {success && <div className="alert alert-success">{success}</div>}

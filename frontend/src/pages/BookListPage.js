@@ -61,11 +61,40 @@ function BookListPage() {
         e.stopPropagation();
         e.preventDefault();
         setBorrowMsg('');
+        
         try {
             await api.post(`borrow/${bookId}/`);
             setBorrowMsg('Book borrowed successfully!');
+            
+            // Refresh books data to update available copies
+            api.get('books/').then(booksRes => {
+                setBooks(booksRes.data);
+            }).catch(err => {
+                console.error('Failed to refresh books data:', err);
+            });
+            
         } catch (err) {
-            setBorrowMsg(err.response?.data?.error || 'Could not borrow book.');
+            console.error('Borrow error:', err);
+            
+            if (err.response?.status === 400) {
+                const errorMessage = err.response.data?.error || err.response.data?.message;
+                
+                if (errorMessage?.includes('already borrowed') || errorMessage?.includes('already have')) {
+                    setBorrowMsg('You have already borrowed this book. Please return it before borrowing again.');
+                } else if (errorMessage?.includes('No copies available') || errorMessage?.includes('not available')) {
+                    setBorrowMsg('Sorry, this book is currently unavailable. All copies have been borrowed.');
+                } else if (errorMessage?.includes('not logged in') || errorMessage?.includes('authentication')) {
+                    setBorrowMsg('Please log in to borrow books.');
+                } else {
+                    setBorrowMsg(errorMessage || 'Could not borrow book. Please try again.');
+                }
+            } else if (err.response?.status === 401) {
+                setBorrowMsg('Please log in to borrow books.');
+            } else if (err.response?.status === 403) {
+                setBorrowMsg('You do not have permission to borrow books.');
+            } else {
+                setBorrowMsg('Could not borrow book. Please check your connection and try again.');
+            }
         }
     };
 
@@ -108,19 +137,26 @@ function BookListPage() {
                                     <div className="card-body">
                                         <h5 className="card-title">{book.title}</h5>
                                         <p className="card-text">by {book.author}</p>
+                                        <p className="card-text">
+                                            <small className="text-muted">
+                                                Available: {book.available_copies}/{book.total_copies} copies
+                                            </small>
+                                        </p>
                                         {book.available_copies <= 0 ? (
                                             <button
                                                 className="btn btn-secondary w-100 mt-2"
                                                 disabled
+                                                title="No copies available"
                                             >
-                                                Unavailable
+                                                <i className="bi bi-x-circle"></i> Unavailable
                                             </button>
                                         ) : (
                                             <button
                                                 className="btn btn-borrow w-100 mt-2"
                                                 onClick={e => handleBorrow(e, book.id)}
+                                                title={`Borrow this book (${book.available_copies} copies available)`}
                                             >
-                                                Borrow
+                                                <i className="bi bi-book"></i> Borrow
                                             </button>
                                         )}
                                     </div>
