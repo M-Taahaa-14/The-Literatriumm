@@ -56,5 +56,11 @@ coverage.xml
 staticfiles/
 static/
 
+# Media files - allow directory structure but ignore actual files
+media/*
+!media/.gitkeep
+!media/*/
+!media/*/.gitkeep
+
 # Test files
 test-results/

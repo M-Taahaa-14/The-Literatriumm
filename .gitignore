@@ -27,7 +27,11 @@ analytics/*.db
 
 # Django static/media
 staticfiles/
-media/
+# Allow media directory structure but ignore the actual files
+media/*
+!media/.gitkeep
+!media/*/
+!media/*/.gitkeep
 
 # React/Node
 frontend/node_modules/
