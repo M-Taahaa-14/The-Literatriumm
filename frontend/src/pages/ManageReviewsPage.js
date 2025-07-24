@@ -71,52 +71,55 @@ function ManageReviewsPage() {
     };
 
     return (
-        <div>
-            <h2>Manage Reviews</h2>
-            <div className="row g-3 mb-4">
-                <div className="col-md-8">
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Filter by book title (auto-filter)" 
-                        value={bookQuery} 
-                        onChange={e => setBookQuery(e.target.value)} 
-                    />
-                </div>
-                <div className="col-md-4">
-                    <select 
-                        className="form-select" 
-                        value={ratingQuery} 
-                        onChange={e => setRatingQuery(e.target.value)}
-                    >
-                        <option value="">All Ratings</option>
-                        {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Star{n > 1 ? 's' : ''}</option>)}
-                    </select>
-                </div>
-            </div>
-            {error && <div className="alert alert-danger">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
-            {loading ? (
-                <div className="text-center my-5">
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flexShrink: 0, marginBottom: '1rem' }}>
+                <h2>Manage Reviews</h2>
+                <div className="row g-3 mb-4">
+                    <div className="col-md-8">
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Filter by book title (auto-filter)" 
+                            value={bookQuery} 
+                            onChange={e => setBookQuery(e.target.value)} 
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <select 
+                            className="form-select" 
+                            value={ratingQuery} 
+                            onChange={e => setRatingQuery(e.target.value)}
+                        >
+                            <option value="">All Ratings</option>
+                            {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Star{n > 1 ? 's' : ''}</option>)}
+                        </select>
                     </div>
                 </div>
-            ) : reviews.length === 0 ? (
-                <p>No reviews found.</p>
-            ) : (
-                <div className="table-responsive">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Book</th>
-                                <th>Rating</th>
-                                <th>Content</th>
-                                <th>Created At</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                {error && <div className="alert alert-danger">{error}</div>}
+                {success && <div className="alert alert-success">{success}</div>}
+            </div>
+            <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
+                {loading ? (
+                    <div className="text-center my-5">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                ) : reviews.length === 0 ? (
+                    <p>No reviews found.</p>
+                ) : (
+                    <div className="table-responsive">
+                        <table className="table table-striped">
+                            <thead style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: '#f8f9fa' }}>
+                                <tr>
+                                    <th style={{ width: '15%' }}>User</th>
+                                    <th style={{ width: '20%' }}>Book</th>
+                                    <th style={{ width: '15%' }}>Rating</th>
+                                    <th style={{ width: '30%' }}>Content</th>
+                                    <th style={{ width: '12%' }}>Created At</th>
+                                    <th style={{ width: '8%' }}>Action</th>
+                                </tr>
+                            </thead>
                         <tbody>
                             {reviews.map(review => (
                                 <tr key={review.id}>
@@ -153,6 +156,7 @@ function ManageReviewsPage() {
                                             className="btn btn-danger btn-sm" 
                                             onClick={() => handleDelete(review.id, review.username, review.book_title)}
                                             title="Delete this review"
+                                            style={{ fontSize: '12px', padding: '4px 8px' }}
                                         >
                                             <i className="bi bi-trash"></i> Delete
                                         </button>
@@ -162,7 +166,8 @@ function ManageReviewsPage() {
                         </tbody>
                     </table>
                 </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

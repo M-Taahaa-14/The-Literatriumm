@@ -35,9 +35,9 @@ function AdminLayout() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-                <aside className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} style={{ width: collapsed ? 70 : 220, background: '#111', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 0', minHeight: '100vh', transition: 'width 0.2s' }}>
+                <aside className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} style={{ width: collapsed ? 70 : 220, background: '#111', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 0', height: '100vh', transition: 'width 0.2s', position: 'fixed', zIndex: 1000 }}>
                     <button className="btn btn-link text-white mb-4" style={{ fontSize: 24 }} onClick={() => setCollapsed(!collapsed)}>
                         <BiMenu />
                     </button>
@@ -88,13 +88,15 @@ function AdminLayout() {
                         </Link>
                     </nav>
                 </aside>
-                <div style={{ flex: 1, padding: '2rem', minWidth: 0 }}>
-                    <Outlet />
+                <div style={{ flex: 1, marginLeft: collapsed ? 70 : 220, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'margin-left 0.2s' }}>
+                    <main style={{ flex: 1, padding: '2rem', overflow: 'auto', minHeight: 0 }}>
+                        <Outlet />
+                    </main>
+                    <footer className="bg-dark text-white py-3 text-center" style={{ flexShrink: 0 }}>
+                        <p className="mb-0">&copy; 2025 The Literatrium. All rights reserved.</p>
+                    </footer>
                 </div>
             </div>
-            <footer className="bg-dark text-white py-3 text-center mt-auto" style={{ position: 'relative', zIndex: 1 }}>
-                <p className="mb-0">&copy; 2025 The Literatrium. All rights reserved.</p>
-            </footer>
         </div>
     );
 }

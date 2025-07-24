@@ -131,31 +131,34 @@ function AdminManageCategoriesPage() {
     };
 
     return (
-        <div>
-            <h2>Manage Categories</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
-            <form className="mb-4 d-flex" onSubmit={handleAdd}>
-                <input type="text" className="form-control me-2" placeholder="New category name" value={newCategory} onChange={e => setNewCategory(e.target.value)} required />
-                <button className="btn btn-success" type="submit">Add</button>
-            </form>
-            {loading ? (
-                <div className="text-center my-5">
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flexShrink: 0, marginBottom: '1rem' }}>
+                <h2>Manage Categories</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
+                {success && <div className="alert alert-success">{success}</div>}
+                <form className="mb-4 d-flex" onSubmit={handleAdd}>
+                    <input type="text" className="form-control me-2" placeholder="New category name" value={newCategory} onChange={e => setNewCategory(e.target.value)} required />
+                    <button className="btn btn-success" type="submit">Add</button>
+                </form>
+            </div>
+            <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
+                {loading ? (
+                    <div className="text-center my-5">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            ) : categories.length === 0 ? (
-                <p>No categories found.</p>
-            ) : (
-                <div className="table-responsive">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                ) : categories.length === 0 ? (
+                    <p>No categories found.</p>
+                ) : (
+                    <div className="table-responsive">
+                        <table className="table table-striped">
+                            <thead style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: '#f8f9fa' }}>
+                                <tr>
+                                    <th style={{ width: '70%' }}>Name</th>
+                                    <th style={{ width: '30%' }}>Actions</th>
+                                </tr>
+                            </thead>
                         <tbody>
                             {categories.map(cat => (
                                 <tr key={cat.id}>
@@ -168,15 +171,15 @@ function AdminManageCategoriesPage() {
                                     </td>
                                     <td>
                                         {editId === cat.id ? (
-                                            <>
-                                                <button className="btn btn-primary btn-sm me-2" onClick={() => handleUpdate(cat.id)}>Save</button>
-                                                <button className="btn btn-secondary btn-sm" onClick={() => setEditId(null)}>Cancel</button>
-                                            </>
+                                            <div className="btn-group" role="group">
+                                                <button className="btn btn-primary btn-sm" onClick={() => handleUpdate(cat.id)} style={{ fontSize: '12px', padding: '4px 8px' }}>Save</button>
+                                                <button className="btn btn-secondary btn-sm" onClick={() => setEditId(null)} style={{ fontSize: '12px', padding: '4px 8px' }}>Cancel</button>
+                                            </div>
                                         ) : (
-                                            <>
-                                                <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(cat.id, cat.name)}>Edit</button>
-                                                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(cat.id)}>Delete</button>
-                                            </>
+                                            <div className="btn-group" role="group">
+                                                <button className="btn btn-warning btn-sm" onClick={() => handleEdit(cat.id, cat.name)} style={{ fontSize: '12px', padding: '4px 8px' }}>Edit</button>
+                                                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(cat.id)} style={{ fontSize: '12px', padding: '4px 8px' }}>Delete</button>
+                                            </div>
                                         )}
                                     </td>
                                 </tr>
@@ -184,7 +187,8 @@ function AdminManageCategoriesPage() {
                         </tbody>
                     </table>
                 </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

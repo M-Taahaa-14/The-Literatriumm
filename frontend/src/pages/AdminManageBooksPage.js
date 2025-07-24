@@ -117,25 +117,28 @@ export default function AdminManageBooks() {
     };
 
     return (
-        <div className="container mt-4">
-            <h2>Manage Books</h2>
-            <Link to="/admin/books/add" className="btn btn-success mb-3">
-                + Add New Book
-            </Link>
-            {error && <div className="alert alert-danger">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
-            <table className="table table-striped table-bordered">
-                <thead className="thead-dark">
-                    <tr>
-                        <th>Cover</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Category</th>
-                        <th>Total</th>
-                        <th>Available</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flexShrink: 0, marginBottom: '1rem' }}>
+                <h2>Manage Books</h2>
+                <Link to="/admin/books/add" className="btn btn-success mb-3">
+                    + Add New Book
+                </Link>
+                {error && <div className="alert alert-danger">{error}</div>}
+                {success && <div className="alert alert-success">{success}</div>}
+            </div>
+            <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
+                <table className="table table-striped table-bordered">
+                    <thead className="thead-dark" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+                        <tr>
+                            <th style={{ width: '80px' }}>Cover</th>
+                            <th style={{ width: '25%', maxWidth: '200px' }}>Title</th>
+                            <th style={{ width: '20%' }}>Author</th>
+                            <th style={{ width: '15%' }}>Category</th>
+                            <th style={{ width: '8%' }}>Total</th>
+                            <th style={{ width: '8%' }}>Available</th>
+                            <th style={{ width: '140px' }}>Actions</th>
+                        </tr>
+                    </thead>
                 <tbody>
                     {books.map((book) =>
                         editId === book.id ? (
@@ -161,13 +164,14 @@ export default function AdminManageBooks() {
                                         </small>
                                     )}
                                 </td>
-                                <td>
+                                <td style={{ maxWidth: '200px', wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     <input
                                         type="text"
                                         name="title"
                                         value={editData.title}
                                         onChange={handleChange}
                                         className="form-control"
+                                        style={{ fontSize: '14px' }}
                                     />
                                 </td>
                                 <td>
@@ -177,6 +181,7 @@ export default function AdminManageBooks() {
                                         value={editData.author}
                                         onChange={handleChange}
                                         className="form-control"
+                                        style={{ fontSize: '14px' }}
                                     />
                                 </td>
                                 <td>
@@ -185,6 +190,7 @@ export default function AdminManageBooks() {
                                         value={editData.category}
                                         onChange={handleChange}
                                         className="form-control"
+                                        style={{ fontSize: '14px' }}
                                     >
                                         {categories.map((cat) => (
                                             <option key={cat.id} value={cat.id}>
@@ -200,6 +206,7 @@ export default function AdminManageBooks() {
                                         value={editData.total_copies}
                                         onChange={handleChange}
                                         className="form-control"
+                                        style={{ fontSize: '14px', width: '70px' }}
                                     />
                                 </td>
                                 <td>
@@ -209,21 +216,26 @@ export default function AdminManageBooks() {
                                         value={editData.available_copies}
                                         onChange={handleChange}
                                         className="form-control"
+                                        style={{ fontSize: '14px', width: '70px' }}
                                     />
                                 </td>
                                 <td>
-                                    <button
-                                        className="btn btn-success btn-sm mr-2"
-                                        onClick={() => handleUpdate(book)}
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        className="btn btn-secondary btn-sm"
-                                        onClick={handleCancel}
-                                    >
-                                        Cancel
-                                    </button>
+                                    <div className="btn-group" role="group">
+                                        <button
+                                            className="btn btn-success btn-sm"
+                                            onClick={() => handleUpdate(book)}
+                                            style={{ fontSize: '12px', padding: '4px 8px' }}
+                                        >
+                                            Update
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={handleCancel}
+                                            style={{ fontSize: '12px', padding: '4px 8px' }}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ) : (
@@ -237,7 +249,9 @@ export default function AdminManageBooks() {
                                         />
                                     )}
                                 </td>
-                                <td>{book.title}</td>
+                                <td style={{ maxWidth: '200px', wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <span title={book.title}>{book.title}</span>
+                                </td>
                                 <td>{book.author}</td>
                                 <td>
                                     {
@@ -248,24 +262,29 @@ export default function AdminManageBooks() {
                                 <td>{book.total_copies}</td>
                                 <td>{book.available_copies}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-primary btn-sm mr-2"
-                                        onClick={() => handleEditClick(book)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="btn btn-danger btn-sm"
-                                        onClick={() => handleDelete(book.id)}
-                                    >
-                                        Delete
-                                    </button>
+                                    <div className="btn-group" role="group">
+                                        <button
+                                            className="btn btn-primary btn-sm"
+                                            onClick={() => handleEditClick(book)}
+                                            style={{ fontSize: '12px', padding: '4px 8px' }}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="btn btn-danger btn-sm"
+                                            onClick={() => handleDelete(book.id)}
+                                            style={{ fontSize: '12px', padding: '4px 8px' }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         )
                     )}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 }
