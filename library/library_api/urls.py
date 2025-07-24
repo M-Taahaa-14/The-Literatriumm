@@ -8,7 +8,8 @@ from .views import (
     SearchBooksAPIView, BooksByCategoryAPIView, MyBorrowingsAPIView,
     ReviewListAdminAPIView, ReviewDeleteAdminAPIView,
     AdminBorrowingListAPIView, AdminBorrowingActionAPIView,
-    TopRatedBooksAPIView, MostBorrowedBooksAPIView, CategoriesWithBooksAPIView, HomePageStatsAPIView
+    TopRatedBooksAPIView, MostBorrowedBooksAPIView, CategoriesWithBooksAPIView, HomePageStatsAPIView,
+    TopRatedBooksListAPIView, MostPopularBooksListAPIView
 )
 from rest_framework.routers import DefaultRouter
 
@@ -45,6 +46,10 @@ urlpatterns = [
     path('home/most-borrowed/', MostBorrowedBooksAPIView.as_view(), name='api_most_borrowed_books'),
     path('home/categories-with-books/', CategoriesWithBooksAPIView.as_view(), name='api_categories_with_books'),
     path('home/stats/', HomePageStatsAPIView.as_view(), name='api_home_stats'),
+    
+    # Filtered book lists
+    path('books/top-rated/', TopRatedBooksListAPIView.as_view(), name='api_books_top_rated'),
+    path('books/most-popular/', MostPopularBooksListAPIView.as_view(), name='api_books_most_popular'),
 ]
 
 urlpatterns += router.urls

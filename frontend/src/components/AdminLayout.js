@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import api from '../api';
 import '../App.css';
-import { BiMenu, BiBook, BiCategory, BiUser, BiLogOut, BiHome, BiListCheck, BiPlusCircle, BiStar } from 'react-icons/bi';
+import { BiMenu, BiBook, BiCategory, BiUser, BiLogOut, BiHome, BiListCheck, BiPlusCircle, BiStar, BiBarChart, BiTrendingUp } from 'react-icons/bi';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function getInitials(name) {
@@ -72,6 +72,19 @@ function AdminLayout() {
                         </Link>
                         <Link className="nav-link text-white d-flex align-items-center justify-content-center mb-2" to="/admin/reviews" title="Manage Reviews">
                             <BiStar size={22} />{!collapsed && <span className="ms-2">Manage Reviews</span>}
+                        </Link>
+                        
+                        {/* Analytics Section */}
+                        {!collapsed && (
+                            <div className="text-light text-uppercase mt-3 mb-2" style={{ fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '1px', opacity: 0.7 }}>
+                                Analytics
+                            </div>
+                        )}
+                        <Link className="nav-link text-white d-flex align-items-center justify-content-center mb-2" to="/top-books" title="Top Books">
+                            <BiTrendingUp size={22} />{!collapsed && <span className="ms-2">Top Books</span>}
+                        </Link>
+                        <Link className="nav-link text-white d-flex align-items-center justify-content-center mb-2" to="/monthly_borrowings" title="Monthly Borrowings">
+                            <BiBarChart size={22} />{!collapsed && <span className="ms-2">Monthly Borrowings</span>}
                         </Link>
                     </nav>
                 </aside>

@@ -74,6 +74,33 @@ class CategoryListAPIView(generics.ListAPIView):
     queryset = BookCategory.objects.all()
     serializer_class = BookCategorySerializer
 
+class TopRatedBooksListAPIView(generics.ListAPIView):
+    """Get all top-rated books ordered by rating"""
+    serializer_class = BookSerializer
+    permission_classes = []
+    
+    def get_queryset(self):
+        from django.db.models import Avg, Count
+        return Book.objects.annotate(
+            avg_rating=Avg('reviews__rating'),
+            review_count=Count('reviews')
+        ).filter(
+            review_count__gt=0  # Only books with at least 1 review
+        ).order_by('-avg_rating', '-review_count')
+
+class MostPopularBooksListAPIView(generics.ListAPIView):
+    """Get all books ordered by borrow count"""
+    serializer_class = BookSerializer
+    permission_classes = []
+    
+    def get_queryset(self):
+        from django.db.models import Count
+        return Book.objects.annotate(
+            borrow_count=Count('borrowrecord')
+        ).filter(
+            borrow_count__gt=0  # Only books that have been borrowed
+        ).order_by('-borrow_count')
+
 
 class BorrowRecordListAPIView(generics.ListAPIView):
     queryset = BorrowRecord.objects.all()
@@ -286,7 +313,7 @@ class TopRatedBooksAPIView(APIView):
             review_count=Count('reviews')
         ).filter(
             review_count__gt=0  # Only books with at least 1 review
-        ).order_by('-avg_rating', '-review_count')[:6]  # Top 6 books
+        ).order_by('-avg_rating', '-review_count')[:10]  # Top 10 books
         
         data = []
         for book in books:
@@ -316,7 +343,7 @@ class MostBorrowedBooksAPIView(APIView):
             borrow_count=Count('borrowrecord')
         ).filter(
             borrow_count__gt=0  # Only books that have been borrowed
-        ).order_by('-borrow_count')[:6]  # Top 6 most borrowed
+        ).order_by('-borrow_count')[:10]  # Top 10 most borrowed
         
         data = []
         for book in books:

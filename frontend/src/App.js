@@ -43,8 +43,6 @@ function App() {
           <Route path="/books" element={<ProtectedRoute><BookListPage /></ProtectedRoute>} />
           <Route path="/books/:id" element={<ProtectedRoute><BookDetailsPage /></ProtectedRoute>} />
           <Route path="/user_borrowings" element={<ProtectedRoute><MyBorrowingsPage /></ProtectedRoute>} />
-          <Route path="/top-books" element={<ProtectedRoute><TopBooksPage /></ProtectedRoute>} />
-          <Route path="/monthly_borrowings" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
         </Route>
         
         <Route element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
@@ -54,6 +52,8 @@ function App() {
           <Route path="/admin/borrowings" element={<AdminManageBorrowingsPage />} />
           <Route path="/admin/categories" element={<AdminManageCategoriesPage />} />
           <Route path="/admin/reviews" element={<ManageReviewsPage />} />
+          <Route path="/top-books" element={<TopBooksPage />} />
+          <Route path="/monthly_borrowings" element={<AnalyticsPage />} />
         </Route>
       </Routes>
     </Router>

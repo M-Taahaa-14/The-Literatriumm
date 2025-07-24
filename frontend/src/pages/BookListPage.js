@@ -17,21 +17,32 @@ function BookListPage() {
     const location = useLocation();
 
     useEffect(() => {
-        // Check for category parameter in URL
+        // Check for parameters in URL
         const searchParams = new URLSearchParams(location.search);
         const categoryParam = searchParams.get('category');
+        const typeParam = searchParams.get('type'); // 'top-rated' or 'most-popular'
+        
         if (categoryParam) {
             setSelectedCategory(categoryParam);
         }
 
         setLoading(true);
+        
+        // Determine which API endpoint to use
+        let booksEndpoint = 'books/';
+        if (typeParam === 'top-rated') {
+            booksEndpoint = 'books/top-rated/';
+        } else if (typeParam === 'most-popular') {
+            booksEndpoint = 'books/most-popular/';
+        }
+        
         Promise.all([
-            api.get('books/'),
+            api.get(booksEndpoint),
             api.get('categories/')
         ]).then(([booksRes, catRes]) => {
             setBooks(booksRes.data);
             setCategories(catRes.data);
-            setTotalPages(Math.ceil(booksRes.data.length / BOOKS_PER_PAGE));
+            // Don't set totalPages here - let it be calculated by the filteredBooks effect
             setLoading(false);
         }).catch(() => {
             setBooks([]);
@@ -43,20 +54,34 @@ function BookListPage() {
 
     const filteredBooks = books.filter(book => {
         let match = true;
-        if (selectedCategory) match = match && book.category === parseInt(selectedCategory);
-        if (search.trim()) match = match && (
-            book.title.toLowerCase().includes(search.toLowerCase()) ||
-            book.author.toLowerCase().includes(search.toLowerCase())
-        );
+        if (selectedCategory) {
+            match = match && book.category === parseInt(selectedCategory);
+        }
+        if (search.trim()) {
+            match = match && (
+                book.title.toLowerCase().includes(search.toLowerCase()) ||
+                book.author.toLowerCase().includes(search.toLowerCase())
+            );
+        }
         return match;
     });
 
-    const paginatedBooks = filteredBooks.slice((currentPage - 1) * BOOKS_PER_PAGE, currentPage * BOOKS_PER_PAGE);
-
+    // Update pagination whenever filtered books change
     useEffect(() => {
-        setTotalPages(Math.ceil(filteredBooks.length / BOOKS_PER_PAGE) || 1);
+        const newTotalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE) || 1;
+        setTotalPages(newTotalPages);
+        // Reset to page 1 if current page is beyond the new total
+        if (currentPage > newTotalPages) {
+            setCurrentPage(1);
+        }
+    }, [filteredBooks.length, currentPage]);
+
+    // Also reset page when filters change
+    useEffect(() => {
         setCurrentPage(1);
-    }, [filteredBooks.length]);
+    }, [selectedCategory, search]);
+
+    const paginatedBooks = filteredBooks.slice((currentPage - 1) * BOOKS_PER_PAGE, currentPage * BOOKS_PER_PAGE);
 
     const handlePageChange = (page) => {
         if (page >= 1 && page <= totalPages) {
@@ -106,9 +131,22 @@ function BookListPage() {
         }
     };
 
+    // Get page title based on URL parameters
+    const getPageTitle = () => {
+        const searchParams = new URLSearchParams(location.search);
+        const typeParam = searchParams.get('type');
+        
+        if (typeParam === 'top-rated') {
+            return 'Top Rated Books';
+        } else if (typeParam === 'most-popular') {
+            return 'Most Popular Books';
+        }
+        return 'All Books';
+    };
+
     return (
         <div>
-            <h2>All Books</h2>
+            <h2>{getPageTitle()}</h2>
             <div className="row mb-4">
                 <div className="col-md-6 mb-2">
                     <select className="form-select" value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}>
@@ -137,6 +175,22 @@ function BookListPage() {
                 </div>
             ) : (
                 <>
+                    {/* Results Counter */}
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <p className="text-muted mb-0">
+                            Showing {filteredBooks.length} book{filteredBooks.length !== 1 ? 's' : ''}
+                            {selectedCategory && categories.find(cat => cat.id === parseInt(selectedCategory)) && 
+                                ` in ${categories.find(cat => cat.id === parseInt(selectedCategory)).name}`
+                            }
+                            {search && ` matching "${search}"`}
+                        </p>
+                        {filteredBooks.length > BOOKS_PER_PAGE && (
+                            <small className="text-muted">
+                                Page {currentPage} of {totalPages}
+                            </small>
+                        )}
+                    </div>
+                    
                     <div className="row row-cols-1 row-cols-md-4 g-4 mb-4">
                         {paginatedBooks.map(book => (
                             <div className="col" key={book.id}>
@@ -173,21 +227,24 @@ function BookListPage() {
                         ))}
                         {paginatedBooks.length === 0 && <div className="text-center text-muted">No books found.</div>}
                     </div>
-                    <nav aria-label="Book pagination">
-                        <ul className="pagination justify-content-center">
-                            <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
-                                <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>&laquo;</button>
-                            </li>
-                            {Array.from({ length: totalPages }, (_, i) => (
-                                <li key={i + 1} className={`page-item${currentPage === i + 1 ? ' active' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
+                    {/* Pagination - only show if there are multiple pages */}
+                    {totalPages > 1 && (
+                        <nav aria-label="Book pagination">
+                            <ul className="pagination justify-content-center">
+                                <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>&laquo;</button>
                                 </li>
-                            ))}
-                            <li className={`page-item${currentPage === totalPages ? ' disabled' : ''}`}>
-                                <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>&raquo;</button>
-                            </li>
-                        </ul>
-                    </nav>
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <li key={i + 1} className={`page-item${currentPage === i + 1 ? ' active' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
+                                    </li>
+                                ))}
+                                <li className={`page-item${currentPage === totalPages ? ' disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>&raquo;</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    )}
                 </>
             )}
         </div>

@@ -7,6 +7,7 @@ function HomePage() {
     const [topRatedBooks, setTopRatedBooks] = useState([]);
     const [mostBorrowedBooks, setMostBorrowedBooks] = useState([]);
     const [categoriesWithBooks, setCategoriesWithBooks] = useState([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(true);
@@ -91,6 +92,20 @@ function HomePage() {
             } else {
                 setError('Could not borrow book. Please check your connection and try again.');
             }
+        }
+    };
+
+    const scrollToPopular = () => {
+        const popularSection = document.getElementById('popular-section');
+        if (popularSection) {
+            popularSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const scrollToCategories = () => {
+        const categoriesSection = document.getElementById('categories-section');
+        if (categoriesSection) {
+            categoriesSection.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
@@ -196,9 +211,23 @@ function HomePage() {
                     <div className="col-md-8">
                         <h1 className="display-5 fw-bold mb-3">Welcome to Literatrium Library</h1>
                         <p className="lead mb-3">Discover your next favorite book from our extensive collection</p>
-                        <Link to="/books" className="btn btn-light btn-lg">
-                            <i className="bi bi-book"></i> Browse All Books
-                        </Link>
+                        <div className="d-flex flex-wrap gap-2">
+                            <Link to="/books" className="btn btn-light btn-lg">
+                                <i className="bi bi-book"></i> Browse All Books
+                            </Link>
+                            <button 
+                                onClick={scrollToPopular}
+                                className="btn btn-outline-light"
+                            >
+                                <i className="bi bi-graph-up"></i> Most Popular
+                            </button>
+                            <button 
+                                onClick={scrollToCategories}
+                                className="btn btn-outline-light"
+                            >
+                                <i className="bi bi-collection"></i> Browse Categories
+                            </button>
+                        </div>
                     </div>
                     <div className="col-md-4">
                         {stats && (
@@ -236,7 +265,7 @@ function HomePage() {
                         <i className="bi bi-star-fill me-2"></i>
                         Top Rated Books
                     </h2>
-                    <Link to="/books" className="btn btn-outline-primary btn-sm">
+                    <Link to="/books?type=top-rated" className="btn btn-outline-primary btn-sm">
                         View All <i className="bi bi-arrow-right"></i>
                     </Link>
                 </div>
@@ -255,13 +284,13 @@ function HomePage() {
             </section>
 
             {/* Most Borrowed Books Section */}
-            <section className="mb-5">
+            <section className="mb-5" id="popular-section">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="h3 fw-bold text-success">
                         <i className="bi bi-graph-up me-2"></i>
                         Most Popular Books
                     </h2>
-                    <Link to="/books" className="btn btn-outline-success btn-sm">
+                    <Link to="/books?type=most-popular" className="btn btn-outline-success btn-sm">
                         View All <i className="bi bi-arrow-right"></i>
                     </Link>
                 </div>
@@ -280,38 +309,121 @@ function HomePage() {
             </section>
 
             {/* Categories Section */}
-            <section className="mb-5">
+            <section className="mb-5" id="categories-section">
                 <h2 className="h3 fw-bold text-info mb-4">
                     <i className="bi bi-collection me-2"></i>
                     Browse by Categories
                 </h2>
-                {categoriesWithBooks.map(category => (
-                    <div key={category.id} className="mb-5">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="h4 text-dark">
-                                {category.name}
-                                <span className="badge bg-secondary ms-2">{category.total_books} books</span>
-                            </h3>
-                            <Link 
-                                to={`/books?category=${category.id}`} 
-                                className="btn btn-outline-info btn-sm"
-                            >
-                                View All in {category.name} <i className="bi bi-arrow-right"></i>
-                            </Link>
+                
+                {/* Category Selection */}
+                <div className="card mb-4" style={{ 
+                    borderRadius: '0.75rem', 
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
+                }}>
+                    <div className="card-body p-4">
+                        <div className="text-center mb-3">
+                            <h5 className="card-title mb-2">
+                                <i className="bi bi-grid-3x3-gap me-2 text-info"></i>
+                                Select a Category
+                            </h5>
+                            <p className="card-text text-muted mb-3">
+                                Choose from {categoriesWithBooks.length} categories to discover books in your favorite genres
+                            </p>
                         </div>
-                        {category.books.length > 0 ? (
-                            <div className="row">
-                                {category.books.map(book => (
-                                    <BookCard key={book.id} book={book} />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center text-muted py-3">
-                                <p>No books in this category yet.</p>
-                            </div>
-                        )}
+                        
+                        {/* Category Buttons */}
+                        <div className="d-flex flex-wrap justify-content-center gap-3 mb-4">
+                            <button
+                                className={`btn ${selectedCategoryId === '' ? 'btn-info' : 'btn-outline-info'}`}
+                                onClick={() => setSelectedCategoryId('')}
+                                style={{ minWidth: '120px' }}
+                            >
+                                <i className="bi bi-collection me-2"></i>
+                                All Categories
+                            </button>
+                            
+                            {categoriesWithBooks.map(category => (
+                                <button
+                                    key={category.id}
+                                    className={`btn ${
+                                        selectedCategoryId === category.id.toString() ? 'btn-info' : 'btn-outline-info'
+                                    }`}
+                                    onClick={() => setSelectedCategoryId(category.id.toString())}
+                                    style={{ minWidth: '100px' }}
+                                >
+                                    {category.name}
+                                    <span className="badge bg-light text-dark ms-2">{category.total_books}</span>
+                                </button>
+                            ))}
+                        </div>
+                        
+                        {/* Quick Stats */}
+                        <div className="text-center">
+                            <small className="text-muted">
+                                <i className="bi bi-info-circle me-1"></i>
+                                {categoriesWithBooks.reduce((total, cat) => total + cat.total_books, 0)} books 
+                                across {categoriesWithBooks.length} categories
+                            </small>
+                        </div>
                     </div>
-                ))}
+                </div>
+
+                {/* Display Selected Category Books or Clean Message */}
+                {selectedCategoryId ? (
+                    // Show selected category books
+                    categoriesWithBooks
+                        .filter(category => category.id === parseInt(selectedCategoryId))
+                        .map(category => (
+                            <div key={category.id} className="mb-4">
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                    <h3 className="h4 text-dark mb-0">
+                                        <i className="bi bi-bookmark-fill me-2 text-info"></i>
+                                        {category.name} Collection
+                                    </h3>
+                                    <div className="d-flex gap-2">
+                                        <span className="badge bg-info fs-6 px-3 py-2">
+                                            {category.total_books} books available
+                                        </span>
+                                        <Link 
+                                            to={`/books?category=${category.id}`} 
+                                            className="btn btn-info btn-sm"
+                                        >
+                                            View All <i className="bi bi-arrow-right"></i>
+                                        </Link>
+                                    </div>
+                                </div>
+                                {category.books.length > 0 ? (
+                                    <div className="row">
+                                        {category.books.map(book => (
+                                            <BookCard key={book.id} book={book} />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="alert alert-info border-0" style={{ backgroundColor: '#e7f3ff' }}>
+                                        <div className="d-flex align-items-center">
+                                            <i className="bi bi-info-circle me-3 text-info" style={{ fontSize: '1.5rem' }}></i>
+                                            <div>
+                                                <h6 className="mb-1">No books displayed</h6>
+                                                <p className="mb-0 text-muted">Books in this category are available but not shown in the preview. Click "View All" to see the complete collection.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))
+                ) : (
+                    // Clean welcome message when no category is selected
+                    <div className="text-center py-4">
+                        <div className="mb-4">
+                            <i className="bi bi-collection text-info mb-3" style={{ fontSize: '3rem' }}></i>
+                            <h4 className="text-info mb-3">Explore Our Book Categories</h4>
+                            <p className="text-muted mb-0" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                                Select any category above to discover curated books in that genre. 
+                                Each category showcases the best titles we have to offer.
+                            </p>
+                        </div>
+                    </div>
+                )}
             </section>
 
             {/* Call to Action */}
