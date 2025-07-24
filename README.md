@@ -124,6 +124,120 @@ python app.py
 - Keep commits focused and atomic
 - Follow conventional commit format when possible
 
+## 💾 Database Synchronization Across Devices
+
+When working on multiple devices, you need to sync your database state. This project uses Django fixtures for cross-device database synchronization.
+
+### 🗄️ Sync Tool Usage
+
+The project includes a `sync_database.py` script for easy database synchronization:
+
+```bash
+cd library
+python sync_database.py [command]
+```
+
+#### Available Commands:
+- `export` - Export current database to fixtures
+- `import` - Import database from fixtures  
+- `setup` - Setup fresh database (run migrations)
+- `status` - Show current database and sync status
+
+### 📤 Exporting Database (Device 1)
+
+```bash
+# Export your current database
+cd library
+python sync_database.py export
+
+# Commit and push the database files
+git add database_sync/
+git commit -m "Database sync - $(date +%Y%m%d)"
+git push origin main
+```
+
+This creates:
+- `database_sync/full_backup_TIMESTAMP.json` - Complete database backup
+- `database_sync/library_data_TIMESTAMP.json` - Library app data only
+- `database_sync/users_TIMESTAMP.json` - User accounts and profiles
+- `database_sync/latest_*.json` - Latest versions for easy import
+- `database_sync/sync_info.json` - Sync metadata and statistics
+
+### 📥 Importing Database (Device 2)
+
+```bash
+# Pull the latest changes
+git pull origin main
+
+# For fresh setup (first time)
+cd library
+python sync_database.py setup
+python sync_database.py import
+
+# For existing setup
+cd library
+python sync_database.py import
+```
+
+### 🔄 Regular Sync Workflow
+
+#### On your main development device:
+```bash
+# After making database changes (adding books, users, etc.)
+python sync_database.py export
+git add database_sync/
+git commit -m "Database sync: Added new books and categories"
+git push origin main
+```
+
+#### On your secondary device:
+```bash
+# Pull latest changes including database
+git pull origin main
+python sync_database.py import
+
+# Start working
+python manage.py runserver
+```
+
+### 📊 Checking Sync Status
+
+```bash
+# View current database state and available sync files
+python sync_database.py status
+```
+
+### ⚠️ Important Notes
+
+1. **Backup First**: Always backup important data before importing
+2. **Development Only**: This method is ideal for development/testing
+3. **User Passwords**: User passwords are included in sync (development convenience)
+4. **Production**: For production, use proper database migration strategies
+5. **Conflicts**: Import overwrites existing data - handle conflicts manually if needed
+
+### 🎯 Benefits
+
+- ✅ **Git Integration**: Database state is version controlled
+- ✅ **Cross-Device Sync**: Work seamlessly across multiple devices  
+- ✅ **Easy Setup**: New team members can get full database quickly
+- ✅ **Selective Sync**: Choose what data to sync
+- ✅ **Backup History**: All database states are preserved in Git history
+- ✅ **Development Friendly**: Perfect for development and testing environments
+
+### 📁 File Structure
+
+```
+library/
+├── sync_database.py           # Database sync tool
+├── database_sync/             # Sync files directory
+│   ├── .gitkeep              # Ensures directory is tracked
+│   ├── latest_full_backup.json
+│   ├── latest_library_data.json
+│   ├── latest_users.json
+│   ├── sync_info.json
+│   └── [timestamped backups...]
+```
+
 ## 🔧 Data Synchronization
 
 The analytics microservice requires data synchronization from Django to PostgreSQL:

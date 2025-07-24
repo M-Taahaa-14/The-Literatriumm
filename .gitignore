@@ -33,6 +33,9 @@ media/*
 !media/*/
 !media/*/.gitkeep
 
+# Database sync files (these SHOULD be tracked for cross-device sync)
+# database_sync/ - intentionally NOT ignored to sync database across devices
+
 # React/Node
 frontend/node_modules/
 frontend/build/
