@@ -1,0 +1,2 @@
+# This directory contains database synchronization files
+# Files in this directory are used to sync database state across different development environments
