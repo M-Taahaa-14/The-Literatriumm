@@ -16,6 +16,18 @@ function BookDetailsPage() {
     const [currentUsername, setCurrentUsername] = useState(null);
     const [currentUserId, setCurrentUserId] = useState(null);
 
+    // Auto-clear messages after 3 seconds
+    useEffect(() => {
+        if (error || success) {
+            const timer = setTimeout(() => {
+                setError('');
+                setSuccess('');
+            }, 3000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [error, success]);
+
     useEffect(() => {
         api.get(`books/${id}/`).then(res => setBook(res.data));
         
@@ -215,10 +227,10 @@ function BookDetailsPage() {
                     <div className="mb-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         {reviews.length === 0 && <p>No reviews yet.</p>}
                         {reviews.map(r => (
-                            <div className="card mb-2" key={r.id}>
+                            <div className={`card mb-2 ${isEditing && userReview?.id === r.id ? 'border-primary' : ''}`} key={r.id}>
                                 <div className="card-body p-3">
-                                    <div className="d-flex justify-content-between align-items-start">
-                                        <div>
+                                    <div className="d-flex justify-content-between align-items-start mb-2">
+                                        <div className="flex-grow-1">
                                             <div className="d-flex align-items-center mb-1">
                                                 <span style={{ fontSize: '1rem', color: '#ffc107' }}>
                                                     {[1, 2, 3, 4, 5].map(star => (
@@ -232,21 +244,31 @@ function BookDetailsPage() {
                                             <small className="text-muted">By {r.user_name || 'Anonymous'}</small>
                                         </div>
                                         <div className="d-flex align-items-center gap-2">
-                                            {currentUserId && (r.user === currentUserId || r.user_name === currentUsername) && (
-                                                <button 
-                                                    className="btn btn-outline-primary btn-sm"
-                                                    onClick={() => handleEditClick(r)}
-                                                    disabled={isEditing}
-                                                >
-                                                    <i className="bi bi-pencil"></i> Edit
-                                                </button>
-                                            )}
                                             <small className="text-muted">
                                                 {new Date(r.created_at).toLocaleDateString()}
                                             </small>
+                                            {currentUserId && (r.user === currentUserId || r.user_name === currentUsername) && (
+                                                <button 
+                                                    className={`btn ${isEditing && userReview?.id === r.id ? 'btn-warning' : 'btn-outline-primary'} btn-sm`}
+                                                    onClick={() => handleEditClick(r)}
+                                                    disabled={isEditing && userReview?.id !== r.id}
+                                                    title={isEditing && userReview?.id === r.id ? 'Currently editing this review' : 'Edit your review'}
+                                                >
+                                                    <i className="bi bi-pencil"></i> 
+                                                    {isEditing && userReview?.id === r.id ? 'Editing...' : 'Edit'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
-                                    <p className="mt-2 mb-0 small">{r.content}</p>
+                                    <p className="mb-0 small">{r.content}</p>
+                                    {isEditing && userReview?.id === r.id && (
+                                        <div className="mt-2 p-2 bg-light rounded">
+                                            <small className="text-primary">
+                                                <i className="bi bi-info-circle"></i> 
+                                                You are currently editing this review. Use the form below to make changes.
+                                            </small>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
