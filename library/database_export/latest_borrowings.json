@@ -1,0 +1,332 @@
+[
+  {
+    "id": 1,
+    "user": "Taahaa",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-23T17:42:39.895751+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-04T17:42:39.895751+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 2,
+    "user": "Taahaa",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-23T17:42:41.618233+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-04T17:42:41.618233+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 3,
+    "user": "Taahaa",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-23T17:42:44.661346+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-04T17:42:44.661346+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 4,
+    "user": "Taahaa",
+    "book": "The Pragmatic Programmer",
+    "borrow_date": "2025-07-23T17:42:46.695603+00:00",
+    "return_date": "2025-07-23T17:48:54.518355+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T17:42:46.695603+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 5,
+    "user": "Taahaa",
+    "book": "The Pragmatic Programmer",
+    "borrow_date": "2025-07-23T17:48:57.708842+00:00",
+    "return_date": "2025-07-23T17:49:42.469973+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T17:48:57.708842+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 6,
+    "user": "Taahaa",
+    "book": "The Pragmatic Programmer",
+    "borrow_date": "2025-07-23T17:49:45.245248+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-04T17:49:45.245248+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 7,
+    "user": "UsamaAteeq007",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-23T18:13:31.090653+00:00",
+    "return_date": "2025-07-23T18:16:27.166473+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:13:31.090653+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 8,
+    "user": "UsamaAteeq007",
+    "book": "The Pragmatic Programmer",
+    "borrow_date": "2025-07-23T18:13:33.806007+00:00",
+    "return_date": "2025-07-23T18:16:25.998563+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:13:33.806007+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 9,
+    "user": "UsamaAteeq007",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-23T18:13:46.696763+00:00",
+    "return_date": "2025-07-23T18:16:24.750995+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:13:46.696763+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 10,
+    "user": "UsamaAteeq007",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-23T18:13:48.654053+00:00",
+    "return_date": "2025-07-23T18:16:22.712819+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:13:48.654053+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 11,
+    "user": "UsamaAteeq007",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-23T18:16:38.339820+00:00",
+    "return_date": "2025-07-23T18:56:09.511726+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:16:38.339820+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 12,
+    "user": "UsamaAteeq007",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-23T18:16:39.890525+00:00",
+    "return_date": "2025-07-23T18:56:10.992843+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:16:39.890525+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 13,
+    "user": "UsamaAteeq007",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-23T18:16:40.941461+00:00",
+    "return_date": "2025-07-23T18:56:12.428671+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:16:40.941461+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 14,
+    "user": "DuaZubair10",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-23T18:30:04.367871+00:00",
+    "return_date": "2025-07-23T18:30:21.405005+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:30:04.367871+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 15,
+    "user": "DuaZubair10",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-23T18:30:05.636944+00:00",
+    "return_date": "2025-07-23T18:30:20.105006+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:30:05.636944+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 16,
+    "user": "DuaZubair10",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-23T18:30:06.936341+00:00",
+    "return_date": "2025-07-23T18:30:18.676717+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-04T18:30:06.936341+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 17,
+    "user": "DuaZubair10",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-24T05:05:35.549486+00:00",
+    "return_date": "2025-07-24T05:17:20.497830+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T05:05:35.549486+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 18,
+    "user": "DuaZubair10",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-24T05:08:27.993250+00:00",
+    "return_date": "2025-07-24T05:17:18.081873+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T05:08:27.993250+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 19,
+    "user": "DuaZubair10",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-24T05:08:35.202239+00:00",
+    "return_date": "2025-07-24T05:17:15.804817+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T05:08:35.202239+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 20,
+    "user": "DuaZubair10",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-24T05:17:25.908005+00:00",
+    "return_date": "2025-07-24T06:28:21.092549+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T05:17:25.908005+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 21,
+    "user": "DuaZubair10",
+    "book": "The Great Gatsby",
+    "borrow_date": "2025-07-24T06:28:23.530162+00:00",
+    "return_date": "2025-07-24T06:41:02.202779+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T06:28:23.530162+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 22,
+    "user": "DuaZubair10",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-24T06:40:20.432112+00:00",
+    "return_date": "2025-07-24T06:41:00.888067+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T06:40:20.432112+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 23,
+    "user": "DuaZubair10",
+    "book": "Atomic Habits",
+    "borrow_date": "2025-07-24T06:51:51.337370+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T06:51:51.337370+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 24,
+    "user": "DuaZubair10",
+    "book": "How To Kill a Mockingbird",
+    "borrow_date": "2025-07-24T06:55:47.112262+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T06:55:47.112262+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 25,
+    "user": "admin",
+    "book": "A Brief History of Time",
+    "borrow_date": "2025-07-24T08:05:19.966928+00:00",
+    "return_date": "2025-07-24T08:11:20.297378+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T08:05:19.966928+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 26,
+    "user": "admin",
+    "book": "The Pragmatic Programmer",
+    "borrow_date": "2025-07-24T08:05:38.554759+00:00",
+    "return_date": "2025-07-24T08:11:19.064252+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T08:05:38.554759+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 27,
+    "user": "admin",
+    "book": "Think and Grow Rich",
+    "borrow_date": "2025-07-24T08:09:17.755018+00:00",
+    "return_date": "2025-07-24T08:11:17.764977+00:00",
+    "is_returned": true,
+    "due_date": "2025-08-05T08:09:17.755018+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 28,
+    "user": "Taahaa",
+    "book": "Cosmos",
+    "borrow_date": "2025-07-24T11:30:52.603572+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T11:30:52.603572+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 29,
+    "user": "Taahaa",
+    "book": "A Brief History of Time",
+    "borrow_date": "2025-07-24T11:30:57.360360+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T11:30:57.360360+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 30,
+    "user": "Taahaa",
+    "book": "Code: The Hidden Language of Computer Hardware and Software",
+    "borrow_date": "2025-07-24T11:32:10.343669+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T11:32:10.343669+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 31,
+    "user": "Taahaa",
+    "book": "A Walk in the Woods",
+    "borrow_date": "2025-07-24T11:32:43.995316+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T11:32:43.995316+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 32,
+    "user": "Taahaa",
+    "book": "The Power of Now",
+    "borrow_date": "2025-07-24T11:34:35.916919+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T11:34:35.916919+00:00",
+    "fine": 0.0
+  },
+  {
+    "id": 33,
+    "user": "Taahaa",
+    "book": "The Right Move",
+    "borrow_date": "2025-07-24T19:47:28.929791+00:00",
+    "return_date": null,
+    "is_returned": false,
+    "due_date": "2025-08-05T19:47:28.929791+00:00",
+    "fine": 0.0
+  }
+]

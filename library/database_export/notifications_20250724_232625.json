@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "user": "Taahaa",
+    "message": "Reminder: Please return 'The Great Gatsby' by Aug 04, 2025.",
+    "created_at": "2025-07-23T17:43:09.034329+00:00",
+    "is_read": true
+  },
+  {
+    "id": 2,
+    "user": "Taahaa",
+    "message": "Reminder: Please return 'Atomic Habits' by Aug 04, 2025.",
+    "created_at": "2025-07-23T17:43:10.177664+00:00",
+    "is_read": true
+  },
+  {
+    "id": 3,
+    "user": "Taahaa",
+    "message": "Reminder: Please return 'How To Kill a Mockingbird' by Aug 04, 2025.",
+    "created_at": "2025-07-23T17:43:11.097128+00:00",
+    "is_read": true
+  },
+  {
+    "id": 4,
+    "user": "Taahaa",
+    "message": "Reminder: Please return 'The Pragmatic Programmer' by Aug 04, 2025.",
+    "created_at": "2025-07-23T17:43:12.113725+00:00",
+    "is_read": true
+  },
+  {
+    "id": 5,
+    "user": "Taahaa",
+    "message": "Reminder: Please return 'The Great Gatsby' by Aug 04, 2025.",
+    "created_at": "2025-07-24T11:45:23.439318+00:00",
+    "is_read": true
+  },
+  {
+    "id": 6,
+    "user": "DuaZubair10",
+    "message": "Reminder: Please return 'How To Kill a Mockingbird' by Aug 05, 2025.",
+    "created_at": "2025-07-24T11:45:27.723611+00:00",
+    "is_read": false
+  }
+]

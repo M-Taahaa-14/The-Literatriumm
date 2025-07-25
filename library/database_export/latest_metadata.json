@@ -1,0 +1,20 @@
+{
+  "export_date": "2025-07-24T23:26:25.945768",
+  "timestamp": "20250724_232625",
+  "stats": {
+    "users_count": 7,
+    "categories_count": 18,
+    "books_count": 95,
+    "borrowings_count": 33,
+    "reviews_count": 16,
+    "notifications_count": 6
+  },
+  "files": {
+    "users": "users_20250724_232625.json",
+    "categories": "categories_20250724_232625.json",
+    "books": "books_20250724_232625.json",
+    "borrowings": "borrowings_20250724_232625.json",
+    "reviews": "reviews_20250724_232625.json",
+    "notifications": "notifications_20250724_232625.json"
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "id": 2,
+    "name": "Self Help"
+  },
+  {
+    "id": 3,
+    "name": "Travel"
+  },
+  {
+    "id": 4,
+    "name": "Science"
+  },
+  {
+    "id": 5,
+    "name": "Technology"
+  },
+  {
+    "id": 6,
+    "name": "Biography"
+  },
+  {
+    "id": 7,
+    "name": "Fiction"
+  },
+  {
+    "id": 9,
+    "name": "Philosophy"
+  },
+  {
+    "id": 10,
+    "name": "Non-Fiction"
+  },
+  {
+    "id": 11,
+    "name": "Religion"
+  },
+  {
+    "id": 12,
+    "name": "Politics"
+  },
+  {
+    "id": 13,
+    "name": "International Relations"
+  },
+  {
+    "id": 14,
+    "name": "Crime"
+  },
+  {
+    "id": 15,
+    "name": "Cookbooks"
+  },
+  {
+    "id": 16,
+    "name": "Art & Photography"
+  },
+  {
+    "id": 17,
+    "name": "Music"
+  },
+  {
+    "id": 18,
+    "name": "Business & Economics"
+  },
+  {
+    "id": 19,
+    "name": "Health & Wellness"
+  },
+  {
+    "id": 20,
+    "name": "Romance"
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "username": "Zubair06",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T13:38:47.326416+00:00",
+    "profile": {
+      "full_name": "Muhammad Zubair",
+      "address": "Hassan Parwana, Multan",
+      "phone": "03336194455"
+    }
+  },
+  {
+    "username": "admin",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:32:12.396500+00:00",
+    "profile": {
+      "full_name": "Admin User",
+      "address": "Systems Limited",
+      "phone": "03001122334"
+    }
+  },
+  {
+    "username": "UsamaAteeq007",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:43:16.214503+00:00",
+    "profile": {
+      "full_name": "Usama Ateeq",
+      "address": "Faisal Town, Lahore.",
+      "phone": "03249875012"
+    }
+  },
+  {
+    "username": "asma09",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:43:38.971312+00:00",
+    "profile": {
+      "full_name": "Asma Sikandar",
+      "address": "Eden Value Homes",
+      "phone": "03146113644"
+    }
+  },
+  {
+    "username": "DuaZubair10",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:43:57.838821+00:00",
+    "profile": {
+      "full_name": "Dua Zubair",
+      "address": "Eden Value Homes",
+      "phone": "03336194458"
+    }
+  },
+  {
+    "username": "Adil007",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:44:23.793697+00:00",
+    "profile": {
+      "full_name": "Adil Sikander",
+      "address": "Oversea B, Bahria Town Lahore.",
+      "phone": "03162704561"
+    }
+  },
+  {
+    "username": "Taahaa",
+    "email": "",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "date_joined": "2025-07-23T16:45:03.126586+00:00",
+    "profile": {
+      "full_name": "Muhammad Taahaa",
+      "address": "Block C Street 10 House 50 Eden Value Homes",
+      "phone": "03204884375"
+    }
+  }
+]
